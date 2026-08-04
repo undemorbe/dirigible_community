@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="14" fill="#FBF6EC"/>
+  <!-- клубок пряжи -->
+  <circle cx="30" cy="36" r="19" fill="#1E93CC"/>
+  <path d="M30 17a19 19 0 0 1 0 38z" fill="#EE7B18"/>
+  <g fill="none" stroke="#FBF6EC" stroke-width="2" stroke-linecap="round" opacity=".85">
+    <path d="M14 30c10 3 22 3 32 0"/>
+    <path d="M13 40c11 4 24 4 34 0"/>
+    <path d="M22 19c-6 11-6 23 0 34"/>
+    <path d="M36 18c7 11 7 25 0 36"/>
+  </g>
+  <!-- спица -->
+  <path d="M52 6 L20 58" stroke="#33291F" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="52.5" cy="5.5" r="3.5" fill="#33291F"/>
+</svg>

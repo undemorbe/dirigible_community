@@ -1,0 +1,87 @@
+name: Build & Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Определить адрес сайта
+        id: site
+        env:
+          SITE_URL_VAR: ${{ vars.SITE_URL }}
+        run: |
+          if [ -n "$SITE_URL_VAR" ]; then
+            echo "url=$SITE_URL_VAR" >> "$GITHUB_OUTPUT"
+          else
+            # адрес GitHub Pages для project-репозитория
+            echo "url=https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Собрать сайт
+        env:
+          SITE_URL: ${{ steps.site.outputs.url }}
+          YANDEX_METRIKA_ID: ${{ secrets.YANDEX_METRIKA_ID }}
+          TOP_MAIL_RU_ID: ${{ secrets.TOP_MAIL_RU_ID }}
+          DONATION_WIDGET_ID: ${{ secrets.DONATION_WIDGET_ID }}
+          DONATION_FORM_ID: ${{ secrets.DONATION_FORM_ID }}
+        run: python3 tools/build.py
+
+      - name: Проверить сборку
+        run: python3 tools/check.py
+
+      - name: Собрать артефакт для Pages
+        run: |
+          mkdir -p _site
+          # legacy/ и tools/ на прод не нужны
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.claude' \
+            --exclude='.env*' \
+            --exclude='.gitignore' \
+            --exclude='_site' \
+            --exclude='legacy' \
+            --exclude='tools' \
+            --exclude='*.md' \
+            ./ _site/
+          touch _site/.nojekyll
+          ls -la _site | head -30
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

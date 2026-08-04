@@ -1,0 +1,104 @@
+{
+  "$comment": "Локальный источник данных для ленты материалов. Заменяет закрытый Craftum-эндпоинт /user-website-api/blog/rubrics/<id>/articles/. Поля: id, title, excerpt, date (ISO) либо dateText (свободная подпись, если точная дата в источнике не указана), image, imageAlt, imageWidth, imageHeight, tags[], url.",
+  "version": 1,
+  "tags": [
+    {
+      "id": "practice",
+      "name": "Практика"
+    },
+    {
+      "id": "education",
+      "name": "Обучение"
+    },
+    {
+      "id": "projects",
+      "name": "Проекты"
+    },
+    {
+      "id": "research",
+      "name": "Исследование"
+    }
+  ],
+  "articles": [
+    {
+      "id": "survey-specialists",
+      "title": "Опросник для специалистов о справедливом процессе принятия решений",
+      "excerpt": "Пожалуйста, пройдите опросник и перешлите коллегам. Занимает не более 20 минут.",
+      "date": "2026-05-24",
+      "image": "assets/img/media/survey-specialists.jpg",
+      "imageAlt": "Вязаная фигурка психолога с блокнотом",
+      "imageWidth": 1983,
+      "imageHeight": 793,
+      "tags": [
+        "research"
+      ],
+      "url": "survey-specialists.html"
+    },
+    {
+      "id": "survey-clients",
+      "title": "Опросник для родителей, подростков или молодых взрослых",
+      "excerpt": "Пожалуйста, поделитесь опросником со своими клиентами, у которых был опыт участия в процессах совместного принятия решений.",
+      "date": "2026-05-24",
+      "image": "assets/img/media/survey-clients.jpg",
+      "imageAlt": "Вязаная фигурка подростка заполняет анкету за столом",
+      "imageWidth": 1983,
+      "imageHeight": 793,
+      "tags": [
+        "research"
+      ],
+      "url": "survey-clients.html"
+    },
+    {
+      "id": "rostov-seminar",
+      "title": "Семинар в Ростове-на-Дону: 30 специалистов и реальные кейсы",
+      "excerpt": "Три дня практической работы над случаями участников: карты социальных контактов, моделирование сетевой встречи, роли родителя, подростка и специалиста опеки.",
+      "dateText": "15–17 октября",
+      "image": "assets/img/media/rostov-1.jpg",
+      "imageAlt": "Участники семинара в Ростове-на-Дону за работой",
+      "imageWidth": 2560,
+      "imageHeight": 1920,
+      "tags": [
+        "education",
+        "projects"
+      ],
+      "url": "news.html#rostov"
+    },
+    {
+      "id": "songbook",
+      "title": "Песенник: не-история о Валентине и панк-роке",
+      "excerpt": "Первый выпуск «не-историй» — формат, который позволяет рассказывать о работе, не раскрывая целиком истории благополучателей.",
+      "image": "assets/img/media/news-songbook.jpg",
+      "imageAlt": "Куратор Елена с гитарой на фоне разворота песенника",
+      "imageWidth": 1200,
+      "imageHeight": 896,
+      "tags": [
+        "practice"
+      ],
+      "url": "news.html#songbook"
+    },
+    {
+      "id": "absolut-project",
+      "title": "Завершился проект с БФ «Абсолют-Помощь»",
+      "excerpt": "«Работа с сетью социальных контактов: сопровождение детей и семей с вовлечением их окружения». Рассказываем, почему говорить об успехах сложно — и что мы придумали вместо историй.",
+      "dateText": "Январь",
+      "tags": [
+        "projects",
+        "practice"
+      ],
+      "url": "news.html#absolut"
+    },
+    {
+      "id": "justice-research",
+      "title": "Исследование процедурной справедливости",
+      "excerpt": "Изучаем, как клиенты и специалисты понимают «справедливый процесс» принятия решений, и разрабатываем инструменты оценки справедливости в помощи семьям и детям.",
+      "image": "assets/img/media/research-cover.jpg",
+      "imageAlt": "Вязаная иллюстрация к исследованию процедурной справедливости",
+      "imageWidth": 1024,
+      "imageHeight": 1536,
+      "tags": [
+        "research"
+      ],
+      "url": "research.html"
+    }
+  ]
+}

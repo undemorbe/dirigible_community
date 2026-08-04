@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="44" viewBox="0 0 160 44">
+  <!-- Косичка (aran cable): две переплетающиеся пряди, тайлится по горизонтали.
+       Цвета явные — через url() в CSS currentColor не наследуется. -->
+  <g fill="none" stroke-linecap="round" stroke-width="7">
+    <path d="M0 22 C 12 22, 20 6, 40 6 C 60 6, 68 22, 80 22 C 92 22, 100 38, 120 38 C 140 38, 148 22, 160 22"
+          stroke="#D9A441"/>
+    <path d="M0 22 C 12 22, 20 38, 40 38 C 60 38, 68 22, 80 22 C 92 22, 100 6, 120 6 C 140 6, 148 22, 160 22"
+          stroke="#EE7B18" stroke-opacity=".6"/>
+  </g>
+  <g fill="none" stroke="#FBF6EC" stroke-linecap="round" stroke-width="1.6" opacity=".6">
+    <path d="M0 19 C 12 19, 20 3, 40 3 C 60 3, 68 19, 80 19 C 92 19, 100 35, 120 35 C 140 35, 148 19, 160 19"/>
+  </g>
+</svg>

@@ -1,0 +1,149 @@
+@charset "UTF-8";
+/* =========================================================================
+   Тонкая доводка платёжной формы donation.ru внутри её shadow DOM.
+
+   ОСНОВНАЯ тема задаётся не здесь, а переменными --d7f-* в knit.css
+   (секция «платёжная форма»). Виджет предоставляет 22 такие переменные —
+   это его штатный способ темизации, он переживает обновления вендора.
+
+   Здесь остаётся только то, что переменными не настраивается: шрифты,
+   прозрачный фон карточки и «стежок» по контуру кнопки. Файл подключается
+   внутрь shadowRoot из applyTheme() в assets/js/app.js — обычный CSS
+   страницы сквозь границу shadow DOM не проходит.
+
+   Селекторы принадлежат стороннему виджету: если donation.ru переименует
+   классы, эти правила просто перестанут применяться. Форма останется
+   рабочей и сохранит фирменные цвета из переменных.
+   ========================================================================= */
+
+/* ------------------------------------------------------- тема виджета */
+/* Виджет объявляет свои --d7f-* на .d7f ВНУТРИ shadow DOM, поэтому
+   переопределять их снаружи бесполезно — локальное объявление перекрывает
+   унаследованное.
+   Селектор здесь двойной (.d7f-container .d7f) не случайно: часть переменных
+   вендор задаёт правилом `div .d7f`, и одиночный `.d7f` ему проигрывает
+   по специфичности. */
+.d7f-container .d7f,
+.d7f {
+  /* кнопка */
+  --d7f-btn-back-color: #EE7B18;
+  --d7f-btn-back-color-dark: #C25E06;
+  --d7f-btn-back-color-light: rgba(238, 123, 24, .12);
+  --d7f-btn-color: #FFFFFF;
+
+  /* текст и линии */
+  --d7f-title-color: #33291F;
+  --d7f-primary-text-color: #33291F;
+  --d7f-primary-line-color: #DCC8AA;
+
+  /* кнопки сумм */
+  --d7f-field-checkbox-switch-color: #EE7B18;
+  --d7f-field-checkbox-text-color: #FFFFFF;
+
+  /* блок «Помогать ежемесячно» */
+  --d7f-field-repeat-back-color: rgba(30, 147, 204, .10);
+  --d7f-field-repeat-switch-color: #1E93CC;
+  --d7f-field-repeat-text-color: #FFFFFF;
+
+  /* анонимное пожертвование */
+  --d7f-field-anonymous-switch-color: #1E93CC;
+  --d7f-field-anonymous-text-color: #FFFFFF;
+
+  /* подписи-бейджи */
+  --d7f-badge-description-background: #F4EADA;
+  --d7f-badge-description-color: #6B5A47;
+
+  /* геометрия и служебное */
+  --d7f-border-radius-rem: 1.1rem;
+  --d7f-border-radius-percent: 22%;
+  --d7f-loader-color: #EE7B18;
+  --d7f-slider-color: #1E93CC;
+  --d7f-slider-active-color: #2EA8E0;
+}
+
+/* ------------------------------------------------------------- шрифты */
+.d7f-container,
+.d7f,
+.d7form,
+.d7form input,
+.d7form button {
+  font-family: "Nunito", "Segoe UI", system-ui, sans-serif !important;
+}
+
+.sum-header,
+.sum__col-badge,
+.widget-help__submit,
+button[type="submit"] {
+  font-family: "Comfortaa", "Nunito", sans-serif !important;
+  font-weight: 700 !important;
+}
+
+/* ------------------------------------------------- фон-карточка вендора */
+/* Блок уже лежит в вязаной рамке страницы, вторая карточка лишняя. */
+.d7f-container,
+.d7f,
+.d7form,
+.d7form.form,
+.widget-help {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+/* --------------------------------------------------------------- ширина */
+/* Виджет ограничивает себя max-width: min(100%, 360px) — на десктопе форма
+   превращается в узкую колонку с широкими полями по бокам. Снимаем лимит,
+   ширину задаёт контейнер .donate-widget на странице. */
+.d7f-container .d7form,
+.d7form,
+.d7form.form {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* --------------------------------------------------- «стежок» на кнопке */
+.widget-help__submit,
+button[type="submit"] {
+  position: relative !important;
+  min-height: 58px !important;
+  letter-spacing: .02em !important;
+  box-shadow:
+    0 3px 0 color-mix(in srgb, var(--wool-400, #C7AE8C) 65%, transparent),
+    0 16px 34px -16px color-mix(in srgb, var(--ink, #33291F) 38%, transparent) !important;
+  transition: transform .18s !important;
+}
+.widget-help__submit::after,
+button[type="submit"]::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 5px !important;
+  border: 2px dashed color-mix(in srgb, #fff 60%, transparent) !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+}
+.widget-help__submit:hover,
+button[type="submit"]:hover { transform: translateY(-2px) !important; }
+.widget-help__submit:active,
+button[type="submit"]:active { transform: translateY(1px) !important; }
+
+/* --------------------------------------------------------- поля ввода */
+.widget-help__input,
+.widget-help__input-custom {
+  border: 2px solid var(--wool-300, #DCC8AA) !important;
+  background: var(--wool-50, #FBF6EC) !important;
+  min-height: 48px !important;
+}
+.widget-help__input:focus {
+  outline: none !important;
+  border-color: var(--yarn-blue, #1E93CC) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--yarn-blue, #1E93CC) 25%, transparent) !important;
+}
+::placeholder { color: var(--ink-mute, #927E67) !important; opacity: 1 !important; }
+
+/* --------------------------------------------------------- мелкий текст */
+.footer-content,
+.helpdesk-wrapper { font-size: .85rem !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .widget-help__submit, button[type="submit"] { transition: none !important; }
+}

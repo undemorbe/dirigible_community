@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="26" viewBox="0 0 48 26">
+  <defs>
+    <linearGradient id="strand" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"   stop-color="#0E4585"/>
+      <stop offset=".32" stop-color="#1B6FC9"/>
+      <stop offset=".58" stop-color="#5AA6EE"/>
+      <stop offset="1"   stop-color="#1B6FC9"/>
+    </linearGradient>
+    <radialGradient id="hollow" cx=".5" cy=".25" r=".6">
+      <stop offset="0" stop-color="#0E4585" stop-opacity=".5"/>
+      <stop offset="1" stop-color="#0E4585" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- одна петля: пряди сходятся книзу в «V»; вверху расходятся и уходят
+         под ряд, который лежит выше -->
+    <g id="loop">
+      <ellipse cx="12" cy="9" rx="8.5" ry="8" fill="url(#hollow)"/>
+      <path d="M2 -7 C 3 6, 8 19, 12 30" fill="none" stroke="#0E4585"
+            stroke-width="9" stroke-linecap="round" opacity=".45"
+            transform="translate(0.7 1.5)"/>
+      <path d="M22 -7 C 21 6, 16 19, 12 30" fill="none" stroke="#0E4585"
+            stroke-width="9" stroke-linecap="round" opacity=".45"
+            transform="translate(0.7 1.5)"/>
+      <path d="M2 -7 C 3 6, 8 19, 12 30" fill="none" stroke="url(#strand)"
+            stroke-width="8.5" stroke-linecap="round"/>
+      <path d="M22 -7 C 21 6, 16 19, 12 30" fill="none" stroke="url(#strand)"
+            stroke-width="8.5" stroke-linecap="round"/>
+      <path d="M2.6 -5 C 3.6 6, 8.2 17, 11.7 27" fill="none" stroke="#5AA6EE"
+            stroke-width="1.9" stroke-linecap="round" opacity=".42"/>
+      <path d="M21.4 -5 C 20.4 6, 15.8 17, 12.3 27" fill="none" stroke="#5AA6EE"
+            stroke-width="1.9" stroke-linecap="round" opacity=".42"/>
+    </g>
+
+    <!-- ряд петель, с запасом по краям для бесшовности -->
+    <g id="row">
+      <use href="#loop" x="-24"/>
+      <use href="#loop" x="0"/>
+      <use href="#loop" x="24"/>
+      <use href="#loop" x="48"/>
+    </g>
+  </defs>
+
+  <rect width="48" height="26" fill="#1B6FC9"/>
+  <!-- порядок важен: ряд, лежащий выше, рисуется последним и прячет под собой
+       верхние концы прядей нижнего ряда -->
+  <use href="#row" y="52"/>
+  <use href="#row" y="26"/>
+  <use href="#row" y="0"/>
+  <use href="#row" y="-26"/>
+</svg>

@@ -1,0 +1,399 @@
+@charset "UTF-8";
+/* =========================================================================
+   «Амигуруми» — экспериментальный мотив поверх основной дизайн-системы.
+   Подключается ТОЛЬКО на knit-demo.html, после knit.css.
+
+   Отличие от основного стиля: там вязка — фоновая фактура, здесь она
+   материал самих элементов. Блоки выглядят связанными объёмно: толстая
+   пряжа, обвязка крючком по краю, пуговицы, вышитые галочки.
+
+   Объёмная гладь — SVG-тайлы из assets/img/amigurumi/ (генерируются
+   tools/make_yarn.py). Плоские фактуры — CSS-градиенты, они красятся
+   переменными; тайлам это недоступно, т.к. url() не наследует currentColor.
+   ========================================================================= */
+
+.ami {
+  --yarn-cobalt: #1B6FC9;
+  --yarn-azure:  #2E9BE0;
+  --yarn-tangerine: #E8761E;
+  --yarn-cream:  #F1E4CE;
+  --yarn-sand:   #DCC7A6;
+  --yarn-wine:   #B4436B;
+  --yarn-moss:   #6E8F63;
+
+  --stitch-w: 48px;   /* шаг петли по горизонтали */
+  --stitch-h: 26px;   /* шаг ряда */
+  --page-stitch-w: 30px;
+  --page-stitch-h: 16px;
+
+  background-color: #EFE2CC;
+  background-image:
+    radial-gradient(60% 45% at 12% 8%,  rgba(255, 214, 150, .5) 0%, transparent 60%),
+    radial-gradient(55% 45% at 92% 12%, rgba(120, 190, 245, .34) 0%, transparent 62%),
+    /* вуаль: без неё фоновая пряжа спорит со светлыми панелями поверх неё */
+    linear-gradient(rgba(250, 243, 230, .62), rgba(250, 243, 230, .62)),
+    url("../img/amigurumi/yarn-sand.svg");
+  background-size: auto, auto, auto, var(--page-stitch-w) var(--page-stitch-h);
+}
+
+/* светлые полотна отделяем от светлого фона более выраженным краем */
+.wool--cream, .wool--sand {
+  box-shadow:
+    inset 0 3px 10px rgba(255, 255, 255, .5),
+    inset 0 -14px 26px rgba(90, 60, 25, .3),
+    inset 14px 0 26px rgba(90, 60, 25, .14),
+    inset -14px 0 26px rgba(90, 60, 25, .14),
+    0 0 0 3px rgba(140, 108, 66, .28),
+    0 18px 36px -18px rgba(60, 35, 12, .5);
+}
+
+/* ------------------------------------------------------- вязаное полотно */
+/* .wool — блок «связан» из пряжи: тайл + мягкий валик по краю (объём подушки) */
+.wool {
+  position: relative;
+  border-radius: 30px;
+  background-repeat: repeat;
+  background-size: var(--stitch-w) var(--stitch-h);
+  box-shadow:
+    inset 0 3px 10px rgba(255, 255, 255, .35),
+    inset 0 -14px 26px rgba(60, 35, 12, .28),
+    inset 14px 0 26px rgba(60, 35, 12, .12),
+    inset -14px 0 26px rgba(60, 35, 12, .12),
+    0 16px 34px -18px rgba(60, 35, 12, .55);
+  color: #fff;
+}
+
+.wool--cobalt { background-image: url("../img/amigurumi/yarn-cobalt.svg"); }
+.wool--azure  { background-image: url("../img/amigurumi/yarn-azure.svg"); }
+.wool--orange { background-image: url("../img/amigurumi/yarn-orange.svg"); }
+.wool--wine   { background-image: url("../img/amigurumi/yarn-berry.svg"); }
+.wool--moss   { background-image: url("../img/amigurumi/yarn-sage.svg"); }
+.wool--cream  { background-image: url("../img/amigurumi/yarn-cream.svg"); color: #3A2A18; }
+.wool--sand   { background-image: url("../img/amigurumi/yarn-sand.svg");  color: #3A2A18; }
+
+/* масштаб пряжи: тонкая / толстая */
+.wool--fine  { --stitch-w: 26px; --stitch-h: 14px; }
+.wool--chunky { --stitch-w: 84px; --stitch-h: 46px; }
+
+/* Текст поверх крупной пряжи рябит: фактура даёт постоянный перепад светлое/тёмное
+   под буквами. Тени недостаточно — текст кладём на «нашитую табличку», которая
+   гасит фактуру под собой. Так же устроен референс: надписи там на табличках,
+   а не прямо на свитере. */
+.ink-plate {
+  background: rgba(9, 46, 86, .58);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  border-radius: 22px;
+  padding: clamp(1rem, 3vw, 1.4rem) clamp(1.1rem, 3vw, 1.6rem);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .22),
+    inset 0 -2px 6px rgba(0, 0, 0, .2);
+}
+.ink-plate,
+.ink-plate :is(h1, h2, h3, p, li, strong) { color: #FFFFFF; }
+.ink-plate .lead { color: #E9F3FF; }
+
+/* на светлой пряже — светлая табличка с тёмным текстом */
+.ink-plate--light {
+  background: rgba(255, 252, 244, .8);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .8),
+    inset 0 -2px 6px rgba(90, 60, 25, .16);
+}
+.ink-plate--light,
+.ink-plate--light :is(h1, h2, h3, p, li, strong) { color: #33261A; }
+.ink-plate--light .lead { color: #5B452C; }
+
+/* лёгкая тень остаётся для одиночных подписей вне табличек */
+.wool:not(.wool--cream):not(.wool--sand) :is(h1, h2, h3, p, li, span, strong) {
+  text-shadow: 0 2px 5px rgba(10, 40, 75, .55);
+}
+.ink-plate :is(h1, h2, h3, p, li, span, strong) { text-shadow: none; }
+
+/* ------------------------------------------------ обвязка крючком по краю */
+/* Полукруглые «рачьи шаги» по нижнему краю блока. */
+.crochet-edge { position: relative; }
+.crochet-edge::after {
+  content: "";
+  position: absolute; left: 10px; right: 10px; bottom: -12px; height: 24px;
+  background: var(--edge, var(--yarn-tangerine));
+  -webkit-mask-image: radial-gradient(circle at 12px 0, #000 11.5px, transparent 12px);
+          mask-image: radial-gradient(circle at 12px 0, #000 11.5px, transparent 12px);
+  -webkit-mask-size: 24px 24px; mask-size: 24px 24px;
+  -webkit-mask-repeat: repeat-x; mask-repeat: repeat-x;
+  filter: drop-shadow(0 4px 4px rgba(60, 35, 12, .35));
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------- жгут-шнурок */
+.cord {
+  height: 22px;
+  border-radius: var(--r-pill);
+  background-image:
+    repeating-linear-gradient(64deg,
+      color-mix(in srgb, var(--cord-color, var(--yarn-tangerine)) 100%, #000 22%) 0 7px,
+      var(--cord-color, var(--yarn-tangerine)) 7px 15px,
+      color-mix(in srgb, var(--cord-color, var(--yarn-tangerine)) 100%, #fff 35%) 15px 20px,
+      var(--cord-color, var(--yarn-tangerine)) 20px 28px);
+  box-shadow:
+    inset 0 3px 5px rgba(255, 255, 255, .35),
+    inset 0 -5px 8px rgba(60, 35, 12, .35),
+    0 6px 14px -6px rgba(60, 35, 12, .5);
+}
+
+/* ------------------------------------------------- плоские фактуры на CSS */
+/* Резинка 2×2 — вертикальные валики */
+.tex-rib {
+  background-image:
+    repeating-linear-gradient(90deg,
+      color-mix(in srgb, var(--tex, var(--yarn-cobalt)) 100%, #000 30%) 0 3px,
+      var(--tex, var(--yarn-cobalt)) 3px 11px,
+      color-mix(in srgb, var(--tex, var(--yarn-cobalt)) 100%, #fff 32%) 11px 15px,
+      var(--tex, var(--yarn-cobalt)) 15px 23px,
+      color-mix(in srgb, var(--tex, var(--yarn-cobalt)) 100%, #000 30%) 23px 26px);
+}
+
+/* Жемчужная вязка — шахматные бугорки */
+.tex-seed {
+  background-color: var(--tex, var(--yarn-cream));
+  background-image:
+    radial-gradient(circle at 25% 25%, color-mix(in srgb, var(--tex, var(--yarn-cream)) 100%, #fff 45%) 22%, transparent 23%),
+    radial-gradient(circle at 75% 75%, color-mix(in srgb, var(--tex, var(--yarn-cream)) 100%, #fff 45%) 22%, transparent 23%),
+    radial-gradient(circle at 75% 25%, color-mix(in srgb, var(--tex, var(--yarn-cream)) 100%, #000 26%) 20%, transparent 21%),
+    radial-gradient(circle at 25% 75%, color-mix(in srgb, var(--tex, var(--yarn-cream)) 100%, #000 26%) 20%, transparent 21%);
+  background-size: 28px 28px;
+}
+
+/* Соты / плетёнка */
+.tex-waffle {
+  background-color: var(--tex, var(--yarn-moss));
+  background-image:
+    repeating-linear-gradient(45deg,
+      color-mix(in srgb, var(--tex, var(--yarn-moss)) 100%, #fff 28%) 0 6px,
+      transparent 6px 20px),
+    repeating-linear-gradient(-45deg,
+      color-mix(in srgb, var(--tex, var(--yarn-moss)) 100%, #000 28%) 0 6px,
+      transparent 6px 20px);
+}
+
+.swatch-tile {
+  min-height: 132px;
+  border-radius: 22px;
+  box-shadow:
+    inset 0 2px 8px rgba(255, 255, 255, .3),
+    inset 0 -10px 20px rgba(60, 35, 12, .3),
+    0 10px 22px -12px rgba(60, 35, 12, .5);
+}
+.swatch-label {
+  display: block; margin-top: .6rem;
+  font-size: .85rem; font-weight: 700; color: #5B452C;
+}
+
+/* --------------------------------------------------------------- мотки */
+.skein {
+  width: 100%; aspect-ratio: 1;
+  border-radius: 50%;
+  background-size: var(--stitch-w) var(--stitch-h);
+  box-shadow:
+    inset 0 6px 14px rgba(255, 255, 255, .4),
+    inset 0 -16px 26px rgba(60, 35, 12, .38),
+    0 12px 24px -12px rgba(60, 35, 12, .55);
+}
+
+/* -------------------------------------------------------- кнопка-пуговица */
+.btn-button {
+  display: inline-flex; align-items: center; gap: .7rem;
+  min-height: 60px; padding: .9rem 1.9rem;
+  border: 0; border-radius: var(--r-pill);
+  background-color: var(--btn, #E8761E);
+  /* вуаль поверх пряжи: без неё крупная фактура рябит под буквами */
+  background-image:
+    linear-gradient(rgba(90, 42, 4, .3), rgba(90, 42, 4, .3)),
+    url("../img/amigurumi/yarn-orange.svg");
+  background-size: auto, 26px 14px;
+  color: #fff; font-family: "Comfortaa", sans-serif; font-weight: 700; font-size: 1.05rem;
+  text-decoration: none; text-shadow: 0 2px 5px rgba(90, 40, 5, .5);
+  box-shadow:
+    inset 0 3px 8px rgba(255, 255, 255, .4),
+    inset 0 -8px 16px rgba(90, 40, 5, .4),
+    0 10px 20px -10px rgba(60, 35, 12, .6);
+  transition: transform .18s var(--ease), box-shadow .18s var(--ease);
+}
+.btn-button:hover { color: #fff; transform: translateY(-3px); }
+.btn-button:active { transform: translateY(2px); }
+.btn-button--blue {
+  background-image:
+    linear-gradient(rgba(6, 38, 70, .34), rgba(6, 38, 70, .34)),
+    url("../img/amigurumi/yarn-cobalt.svg");
+}
+.btn-button--cream {
+  background-image:
+    linear-gradient(rgba(255, 250, 240, .5), rgba(255, 250, 240, .5)),
+    url("../img/amigurumi/yarn-cream.svg");
+  color: #33261A; text-shadow: 0 1px 2px rgba(255, 255, 255, .8);
+}
+
+/* --------------------------------------------------------------- пуговицы */
+/* Дырочки рисуются radial-gradient, а не ::before/::after: псевдоэлементов
+   всего два, а вариантов с четырьмя отверстиями и кольцом больше. */
+.button-dot {
+  --face: #F4E7D2;
+  --hole: #B08A5A;
+  width: 30px; height: 30px; flex: none;
+  border-radius: 50%;
+  background-color: var(--face);
+  background-repeat: no-repeat;
+  background-image:
+    radial-gradient(circle at 32% 50%, var(--hole) 0 2.6px, transparent 2.9px),
+    radial-gradient(circle at 68% 50%, var(--hole) 0 2.6px, transparent 2.9px);
+  box-shadow:
+    inset 0 -3px 5px rgba(90, 60, 25, .35),
+    inset 0 2px 3px rgba(255, 255, 255, .6),
+    0 2px 4px rgba(40, 20, 5, .35);
+  position: relative;
+}
+
+/* четыре отверстия */
+.button-dot--four {
+  background-image:
+    radial-gradient(circle at 34% 34%, var(--hole) 0 2.4px, transparent 2.7px),
+    radial-gradient(circle at 66% 34%, var(--hole) 0 2.4px, transparent 2.7px),
+    radial-gradient(circle at 34% 66%, var(--hole) 0 2.4px, transparent 2.7px),
+    radial-gradient(circle at 66% 66%, var(--hole) 0 2.4px, transparent 2.7px);
+}
+
+/* кольцо: одно крупное отверстие по центру */
+.button-dot--ring {
+  background-image: radial-gradient(circle at 50% 50%, var(--hole) 0 6px, transparent 6.4px);
+}
+
+/* фигурная, с насечками по краю */
+/* порядок слоёв: первый в списке рисуется поверх остальных, поэтому
+   отверстие идёт первым, иначе насечки его перекрывают */
+.button-dot--flower {
+  background-image:
+    radial-gradient(circle at 50% 50%, var(--hole) 0 2.8px, transparent 3.1px),
+    radial-gradient(circle at 50% 50%, var(--face) 0 8px, transparent 8.4px),
+    repeating-conic-gradient(from 0deg,
+      rgba(120, 85, 45, .3) 0deg 12deg, transparent 12deg 24deg);
+}
+
+/* деревянная */
+.button-dot--wood {
+  --face: #C89A62;
+  --hole: #7A4E22;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(122, 78, 34, .22) 0 12px, transparent 12.5px),
+    radial-gradient(circle at 34% 34%, var(--hole) 0 2.4px, transparent 2.7px),
+    radial-gradient(circle at 66% 34%, var(--hole) 0 2.4px, transparent 2.7px),
+    radial-gradient(circle at 34% 66%, var(--hole) 0 2.4px, transparent 2.7px),
+    radial-gradient(circle at 66% 66%, var(--hole) 0 2.4px, transparent 2.7px);
+}
+
+/* перламутровая */
+.button-dot--pearl {
+  --face: #FDF6EA;
+  --hole: #9FB6C7;
+  background-image:
+    linear-gradient(135deg, rgba(190, 220, 240, .55), rgba(255, 240, 220, 0) 60%),
+    radial-gradient(circle at 32% 50%, var(--hole) 0 2.6px, transparent 2.9px),
+    radial-gradient(circle at 68% 50%, var(--hole) 0 2.6px, transparent 2.9px);
+}
+
+/* синяя и оранжевая — под цвет пряжи */
+.button-dot--cobalt { --face: #2E6FB5; --hole: #12406F; }
+.button-dot--orange { --face: #F0954A; --hole: #9C5310; }
+
+/* витрина пуговиц */
+.button-row { display: flex; flex-wrap: wrap; gap: 1.1rem; align-items: flex-start; }
+.button-sample { display: grid; justify-items: center; gap: .45rem; width: 84px; text-align: center; }
+.button-sample .button-dot { width: 42px; height: 42px; }
+.button-sample span { font-size: .74rem; font-weight: 700; color: #5B452C; line-height: 1.25; }
+
+/* ------------------------------------------------------- вязаная анкета */
+.knit-form {
+  display: grid; gap: .8rem;
+  padding: clamp(1.2rem, 4vw, 2rem);
+  border-radius: 28px;
+}
+.knit-form__title {
+  font-family: "Comfortaa", sans-serif; font-weight: 700;
+  font-size: clamp(1.05rem, .95rem + .6vw, 1.35rem);
+  margin: 0 0 .4rem;
+}
+
+.knit-option {
+  display: flex; align-items: center; gap: .9rem;
+  padding: .7rem .9rem;
+  border-radius: 18px;
+  background: rgba(255, 252, 244, .82);
+  box-shadow: inset 0 -3px 8px rgba(90, 60, 25, .18), 0 3px 8px -4px rgba(60, 35, 12, .4);
+  cursor: pointer;
+  font-weight: 600; color: #3A2A18;
+  transition: background-color .2s, transform .18s var(--ease);
+}
+.knit-option:hover { background: #fff; transform: translateX(3px); }
+.knit-option input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+/* «связанный» чекбокс: квадрат из пряжи, галочка вышивается при выборе */
+.knit-check {
+  width: 34px; height: 34px; flex: none;
+  border-radius: 10px;
+  background-color: #F1E4CE;
+  background-image: url("../img/amigurumi/yarn-cream.svg");
+  background-size: 26px 14px;
+  box-shadow: inset 0 -4px 8px rgba(90, 60, 25, .3), inset 0 2px 4px rgba(255, 255, 255, .5);
+  position: relative;
+}
+.knit-check::after {
+  content: "";
+  position: absolute; left: 9px; top: 6px;
+  width: 11px; height: 18px;
+  border: 0 solid #D9482C;
+  border-right-width: 5px; border-bottom-width: 5px;
+  border-radius: 3px;
+  transform: rotate(42deg) scale(.2);
+  opacity: 0;
+  transition: transform .22s var(--ease), opacity .18s;
+}
+.knit-option input:checked + .knit-check::after { opacity: 1; transform: rotate(42deg) scale(1); }
+.knit-option:has(input:checked) { background: #FFF7E6; box-shadow: inset 0 -3px 8px rgba(90,60,25,.2), 0 0 0 3px #E8761E; }
+.knit-option input:focus-visible + .knit-check { outline: 3px dashed #E8761E; outline-offset: 3px; }
+
+/* --------------------------------------------------------- нашивка-бейдж */
+.patch {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .5rem 1.1rem;
+  border-radius: var(--r-pill);
+  background: #F4E7D2;
+  color: #2B4A6B; font-weight: 700; font-size: .9rem; letter-spacing: .04em;
+  box-shadow: 0 4px 10px -4px rgba(60, 35, 12, .5);
+  border: 3px dashed #C9A97C;
+}
+
+/* -------------------------------------------------------------- рамка-фото */
+/* Существующее вязаное изображение в «связанной» рамке с обвязкой. */
+.wool-frame {
+  padding: 16px;
+  border-radius: 34px;
+  background-image: url("../img/amigurumi/yarn-cream.svg");
+  background-size: 34px 18px;
+  box-shadow:
+    inset 0 3px 10px rgba(255, 255, 255, .5),
+    inset 0 -12px 24px rgba(90, 60, 25, .28),
+    0 22px 44px -22px rgba(60, 35, 12, .6);
+}
+.wool-frame > img { display: block; width: 100%; border-radius: 22px; }
+
+/* ------------------------------------------------------------- раскладка */
+.ami-hero { display: grid; gap: clamp(1.5rem, 5vw, 2.5rem); align-items: center; }
+@media (min-width: 900px) { .ami-hero { grid-template-columns: 1.05fr .95fr; } }
+
+.ami-panel { padding: clamp(1.4rem, 4vw, 2.4rem); }
+.ami-grid { display: grid; gap: var(--gap); }
+.ami-grid--3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.ami-grid--4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .knit-option, .btn-button, .knit-check::after { transition: none; }
+}
