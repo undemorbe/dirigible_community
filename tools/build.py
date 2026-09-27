@@ -90,6 +90,26 @@ DONATION = {
     "form_id_brothers": os.environ.get("DONATION_FORM_ID_BROTHERS", "").strip(),
 }
 
+# --------------------------------------------------------------------------
+# Страницы адресных сборов на конкретных детей временно сняты с сайта.
+# Контент и вёрстка сохранены целиком — чтобы вернуть, достаточно собрать
+# с SHOW_CASE_PAGES=1. Пока флаг выключен: страницы не генерируются, блоки
+# «Адресная помощь» на главной и в разделе «Помочь» не выводятся,
+# а старые адреса page2/page6 ведут на общую страницу пожертвований.
+# --------------------------------------------------------------------------
+
+CASE_SLUGS = ("help-vanya.html", "help-brothers.html")
+SHOW_CASE_PAGES = os.environ.get("SHOW_CASE_PAGES", "").strip() == "1"
+
+# Видео курса на RuTube. Не секрет — публичный идентификатор ролика,
+# но держим в одном месте, чтобы не искать по разметке.
+RUTUBE_COURSE_VIDEO = "537fad5738e2f361bfb9a5d0d5b16bf1"
+
+# Магазин ЮKassa для оплаты курса. Форма SimplePay шлёт POST напрямую
+# на yookassa.ru, бэкенд не нужен. Идентификатор — из окружения, чтобы
+# чужая сборка не собирала платежи в кассу организации.
+YOOKASSA_SHOP_ID = os.environ.get("YOOKASSA_SHOP_ID", "").strip()
+
 # PDF-документы остались на CDN организации — это оригиналы, их не копируем.
 PDF = {
     "privacy_policy": CDN + "d85b9857-8847-455f-8e4e-9f865642a14b.pdf",
@@ -97,6 +117,10 @@ PDF = {
     "offer": CDN + "4bc5be66-e154-45ba-bb2f-7094e44986e2.pdf",
     "charter": CDN + "16f042a9-66f9-4773-81ee-72b2cd18157d.pdf",
     "report_2024": CDN + "60bdecb3-a7a0-4504-9414-dface3e9f00e.pdf",
+    # В обновлённой выгрузке «Отчёт 2025» ссылается на тот же файл, что и 2024 —
+    # так на стороне Craftum. Когда организация загрузит отдельный PDF,
+    # заменить ссылку здесь.
+    "report_2025": CDN + "60bdecb3-a7a0-4504-9414-dface3e9f00e.pdf",
     "prolong_2023": CDN + "ce0761c4-c3e5-4b10-b4c4-b89f200295f9.pdf",
     "prolong_2024": CDN + "232fed0a-db1e-4128-9f4a-349d77bd9db3.pdf",
     "edu_transfer": CDN + "bfb77bb3-174c-4e81-afe3-10b8db0b55de.pdf",
@@ -397,6 +421,8 @@ def render_footer() -> str:
         <ul class="footer__list">
 %s
           <li><a href="donate.html">Помочь</a></li>
+          <li><a href="education.html">Обучение</a></li>
+          <li><a href="effective.html">Курс по эффективности психотерапии</a></li>
         </ul>
       </div>
 
@@ -523,6 +549,49 @@ def partners_section() -> str:
     </div>
   </div>
 </section>""" % ("\n".join(cards))
+
+
+def case_help_section(eyebrow: str, heading_id: str, heading: str,
+                      vanya_text: str, brothers_text: str) -> str:
+    """Блок со ссылками на адресные сборы.
+
+    Пока SHOW_CASE_PAGES выключен, возвращает пустую строку: сами страницы
+    не собираются, и ссылки на них вели бы в никуда (check.py это ловит).
+    """
+    if not SHOW_CASE_PAGES:
+        return ""
+
+    return """<section class="section section--purl" aria-labelledby="%s">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <p class="eyebrow">%s</p>
+      <h2 id="%s">%s</h2>
+    </div>
+    <div class="grid grid--2">
+      <a class="card article-card card--link reveal" href="help-vanya.html">
+        %s
+        <div class="article-card__body">
+          <h3 class="article-card__title">Помогите Ване и его близким</h3>
+          <p class="article-card__text">%s</p>
+        </div>
+      </a>
+      <a class="card article-card card--link reveal" href="help-brothers.html">
+        %s
+        <div class="article-card__body">
+          <h3 class="article-card__title">Не прогулять своё будущее</h3>
+          <p class="article-card__text">%s</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+""" % (
+        esc(heading_id), esc(eyebrow), esc(heading_id), esc(heading),
+        img("vanya-main.jpg", "Ваня дома", "article-card__media", focus="50% 25%"),
+        vanya_text,
+        img("brothers-main.jpg", "Максим и Коля", "article-card__media", focus="55% 20%"),
+        brothers_text,
+    )
 
 
 def donate_cta(title: str = "Поддержите «сеть поддержки»",
@@ -661,32 +730,7 @@ page(
   </div>
 </section>
 
-<section class="section section--purl" aria-labelledby="help-title">
-  <div class="container">
-    <div class="section-head section-head--center">
-      <p class="eyebrow">Адресная помощь</p>
-      <h2 id="help-title">Кому нужна помощь прямо сейчас</h2>
-    </div>
-    <div class="grid grid--2">
-      <a class="card article-card card--link reveal" href="help-vanya.html">
-        %s
-        <div class="article-card__body">
-          <h3 class="article-card__title">Помогите Ване и его близким</h3>
-          <p class="article-card__text">Ване 7 лет, у него аутизм. Маме нужна передышка: няня, умеющая работать
-          с «особыми» детьми, и поддержка психолога.</p>
-        </div>
-      </a>
-      <a class="card article-card card--link reveal" href="help-brothers.html">
-        %s
-        <div class="article-card__body">
-          <h3 class="article-card__title">Не прогулять своё будущее</h3>
-          <p class="article-card__text">Максиму 16, Коле 14. Братья перестали учиться. Нужны тьютор,
-          психолог и репетиторы, чтобы Максим сдал ОГЭ.</p>
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
+%s
 
 %s
 
@@ -697,8 +741,12 @@ page(
         yarn("pompom--tr"), yarn("pompom--bl"), ICONS["heart"],
         img("hero-figures.jpg", "Разноцветные фигурки людей стоят кругом на столе во время сетевой встречи",
             eager=True, sizes="(min-width: 900px) 45vw, 92vw"),
-        img("vanya-main.jpg", "Ваня дома", "article-card__media", focus="50% 25%"),
-        img("brothers-main.jpg", "Максим и Коля", "article-card__media", focus="55% 20%"),
+        case_help_section(
+            "Адресная помощь", "help-title", "Кому нужна помощь прямо сейчас",
+            "Ване 7 лет, у него аутизм. Маме нужна передышка: няня, умеющая работать "
+            "с «особыми» детьми, и поддержка психолога.",
+            "Максиму 16, Коле 14. Братья перестали учиться. Нужны тьютор, психолог "
+            "и репетиторы, чтобы Максим сдал ОГЭ."),
         team_section(), partners_section(), donate_cta(),
     ),
 )
@@ -1002,13 +1050,13 @@ page(
   </div>
 </section>
 
-<section class="section section--tight">
+<section class="section section--tight" id="participate">
   <div class="container container--narrow">
-    <div class="swatch" style="padding:clamp(1.5rem,4vw,2.5rem)">
+    <div class="swatch text-center" style="padding:clamp(1.75rem,5vw,3rem)">
       <h2 class="mt-0">Хотите участвовать?</h2>
-      <p>Если вы специалист или организация и вам близка тема — напишите нам, расскажем подробнее
-      об участии в исследовании.</p>
-      <p class="cluster">
+      <p class="lead center-x" style="max-width:52ch">Если вы специалист или организация
+      и вам близка тема — напишите нам, расскажем подробнее об участии в исследовании.</p>
+      <p class="cluster cluster--center mt-2">
         <a class="btn" href="mailto:%s?subject=%s">Написать об исследовании</a>
         <a class="btn btn--ghost" href="https://t.me/dirigible_community" target="_blank" rel="noopener noreferrer">Сообщество в Telegram</a>
       </p>
@@ -1053,30 +1101,7 @@ page(
   </div>
 </section>
 
-<section class="section section--purl" aria-labelledby="address-help-title">
-  <div class="container">
-    <div class="section-head section-head--center">
-      <p class="eyebrow">Адресная помощь</p>
-      <h2 id="address-help-title">Конкретные сборы</h2>
-    </div>
-    <div class="grid grid--2">
-      <a class="card article-card card--link reveal" href="help-vanya.html">
-        %s
-        <div class="article-card__body">
-          <h3 class="article-card__title">Помогите Ване и его близким</h3>
-          <p class="article-card__text">Няня для Вани и психолог для мамы Елены на 3 месяца.</p>
-        </div>
-      </a>
-      <a class="card article-card card--link reveal" href="help-brothers.html">
-        %s
-        <div class="article-card__body">
-          <h3 class="article-card__title">Не прогулять своё будущее</h3>
-          <p class="article-card__text">Тьютор, психолог и репетиторы для Максима и Коли.</p>
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
+%s
 
 <section class="section">
   <div class="container container--narrow">
@@ -1108,8 +1133,10 @@ page(
 </section>
 """ % (
         donate_widget_block(),
-        img("vanya-main.jpg", "Ваня дома", "article-card__media", focus="50% 25%"),
-        img("brothers-main.jpg", "Максим и Коля", "article-card__media", focus="55% 20%"),
+        case_help_section(
+            "Адресная помощь", "address-help-title", "Конкретные сборы",
+            "Няня для Вани и психолог для мамы Елены на 3 месяца.",
+            "Тьютор, психолог и репетиторы для Максима и Коли."),
         ORG["email"], ORG["email"],
     ),
     donation=True,
@@ -1357,6 +1384,7 @@ page(
         <div class="stack" style="gap:.75rem">
           %s
           %s
+          %s
         </div>
       </div>
       <div class="card">
@@ -1374,6 +1402,7 @@ page(
 """ % (
         doc_link(REPORT_2023, "Отчёт 2023", "Облако Mail.ru"),
         doc_link(PDF["report_2024"], "Отчёт 2024"),
+        doc_link(PDF["report_2025"], "Отчёт 2025"),
         doc_link(PDF["prolong_2023"], "Продление деятельности 2023"),
         doc_link(PDF["prolong_2024"], "Продление деятельности 2024"),
         donate_cta("Помогите нам продолжать",
@@ -1591,6 +1620,13 @@ page(
         %s
       </div>
     </div>
+
+    <a class="card card--link card--patch reveal mt-3" href="effective.html" style="display:block">
+      <h3 class="card__title">Инструменты повышения эффективности психотерапии</h3>
+      <p class="card__text">Курс-тренинг для консультирующих психологов: шкалы ORS и SRS,
+      преднамеренная практика, фасилитативные навыки. 32 ак. часа, онлайн.</p>
+      <p class="mb-0"><span class="btn btn--ghost">Открыть страницу курса</span></p>
+    </a>
   </div>
 </section>
 
@@ -1951,6 +1987,330 @@ page(
 )
 
 
+# ------------------------------------------------------------------ курс
+
+
+def video_embed(video_id: str, poster: str, alt: str, label: str) -> str:
+    """Видео с постером и ленивой загрузкой плеера.
+
+    Iframe подставляется только по клику (см. initVideo в app.js): до этого
+    сторонний плеер и его куки не загружаются, а страница не тянет лишние
+    сотни килобайт. Постер — обычная картинка, поэтому виден и без JS.
+    """
+    return """<div class="video knit-frame knit-frame--flat" data-video
+     data-video-src="https://rutube.ru/play/embed/%s?autoplay=1">
+      %s
+      <button class="video__play" type="button" data-video-play aria-label="%s">
+        <svg viewBox="0 0 24 24" width="34" height="34" fill="currentColor" aria-hidden="true">
+          <path d="M8 5.2c0-.9 1-1.5 1.8-1l9.1 5.5c.7.5.7 1.5 0 2l-9.1 5.5c-.8.5-1.8-.1-1.8-1z"/>
+        </svg>
+      </button>
+      <noscript><p class="full-bleed-note mt-1"><a href="https://rutube.ru/video/%s/"
+      target="_blank" rel="noopener noreferrer">Смотреть видео на RuTube</a></p></noscript>
+    </div>""" % (esc(video_id), poster, esc(label), esc(video_id))
+
+
+def yookassa_form() -> str:
+    """Форма оплаты курса (ЮKassa SimplePay).
+
+    Самодостаточна: POST уходит прямо на yookassa.ru, свой бэкенд не нужен.
+    Счётчик количества из оригинала убран — он работал их скриптом, которого
+    в выгрузке нет, и неработающие кнопки «+/−» только путали бы.
+    Без YOOKASSA_SHOP_ID форма не выводится, показывается запасной блок.
+    """
+    if not YOOKASSA_SHOP_ID:
+        return """<div class="swatch" style="padding:clamp(1.4rem,4vw,2.2rem)">
+      <p class="mb-0"><strong>Онлайн-оплата сейчас недоступна.</strong> Так бывает при офлайн-просмотре
+      или локальной сборке без ключей. Напишите нам — пришлём ссылку на оплату:
+      <a href="mailto:%s">%s</a>.</p>
+    </div>""" % (ORG["email"], ORG["email"])
+
+    return """<link rel="stylesheet" href="https://yookassa.ru/integration/simplepay/css/yookassa_construct_form.css?v=1.34.0">
+    <form class="yoomoney-payment-form" action="https://yookassa.ru/integration/simplepay/payment" method="post" accept-charset="utf-8">
+      <div class="ym-products">
+        <div class="ym-block-title ym-products-title">Товары</div>
+        <div class="ym-product">
+          <div class="ym-product-line">
+            <span class="ym-product-description">Курс ПК «Инструменты повышения эффективности психотерапии в действии»</span>
+            <span class="ym-product-price" data-price="17500" data-id="771" data-count="1">17&nbsp;500,00&nbsp;₽</span>
+          </div>
+          <input type="hidden" name="text" value="Курс ПК Инструменты повышения эффективности психотерапии в действии">
+          <input type="hidden" name="price" value="17500">
+          <input type="hidden" name="quantity" value="1">
+          <input type="hidden" name="paymentSubjectType" value="commodity">
+          <input type="hidden" name="paymentMethodType" value="full_prepayment">
+          <input type="hidden" name="tax" value="1">
+        </div>
+      </div>
+      <input type="hidden" name="ym_merchant_receipt" value="">
+      <div class="ym-customer-info">
+        <div class="ym-block-title">О покупателе</div>
+        <label class="visually-hidden" for="yoo-email">Email</label>
+        <input id="yoo-email" name="cps_email" class="ym-input" placeholder="Email" type="email" required>
+        <label class="visually-hidden" for="yoo-name">ФИО</label>
+        <input id="yoo-name" name="custName" class="ym-input" placeholder="ФИО" type="text" required>
+      </div>
+      <div class="ym-payment-btn-block ym-before-line ym-align-space-between">
+        <div class="ym-input-icon-rub ym-display-none">
+          <input name="sum" class="ym-input ym-sum-input ym-required-input" type="number" step="any" value="17500">
+        </div>
+        <button type="submit" data-text="Заплатить" class="ym-btn-pay ym-result-price">
+          <span class="ym-text-crop">Заплатить</span> <span class="ym-price-output">17&nbsp;500,00&nbsp;₽</span>
+        </button>
+        <img src="https://yookassa.ru/integration/simplepay/img/iokassa-gray.svg?v=1.34.0" class="ym-logo" width="114" height="27" alt="ЮKassa">
+      </div>
+      <input type="hidden" name="shopId" value="%s">
+    </form>""" % esc(YOOKASSA_SHOP_ID)
+
+
+page(
+    "effective.html",
+    "Инструменты повышения эффективности психотерапии",
+    "Курс-тренинг для консультирующих психологов: технологии с доказанной эффективностью, "
+    "шкалы ORS и SRS, преднамеренная практика. 32 ак. часа, онлайн, удостоверение о ПК.",
+    """
+<section class="section section--tight">
+  <div class="container">
+    <div class="grid grid--2" style="align-items:center">
+      <div>
+        <p class="eyebrow">Курс повышения квалификации</p>
+        <h1>Инструменты повышения эффективности психотерапии</h1>
+        <p class="lead">Что делает консультирующего психолога эффективным? Что вообще представляет
+        собой «эффективность» в консультативной работе? Как достичь стабильности в организации
+        практики, уменьшив количество преждевременных «выпадений» клиентов из терапии?</p>
+      </div>
+      <div class="knit-frame">
+        %s
+      </div>
+    </div>
+
+    <p class="prose mt-3" style="max-width:none">Наш курс-тренинг поможет вам найти свои ответы
+    на эти вопросы. На нём мы дадим технологии с доказанной эффективностью, которые помогут
+    укрепить ваши профессиональные навыки. Эти технологии используют универсальный «язык»,
+    который будет понятен независимо от того, в каких подходах вы работаете.</p>
+
+    <div class="grid grid--4 mt-3">
+      <div class="card card--patch"><h2 class="card__title">17 500 ₽</h2><p class="card__text mb-0">Стоимость обучения</p></div>
+      <div class="card card--patch"><h2 class="card__title">2 дня</h2><p class="card__text mb-0">Продолжительность</p></div>
+      <div class="card card--patch"><h2 class="card__title">Онлайн</h2><p class="card__text mb-0">Формат обучения</p></div>
+      <div class="card card--patch"><h2 class="card__title">Удостоверение</h2><p class="card__text mb-0">О повышении квалификации установленного образца</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--purl" aria-labelledby="course-what-title">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="course-what-title">На курсе вы</h2>
+    </div>
+    <div class="grid grid--3">
+      <article class="card card--patch reveal">
+        <span class="card__num">1</span>
+        <p class="card__text mb-0">Сразу тренируете навыки и пробуете использовать инструменты
+        в работе в парах с обратной связью тренера.</p>
+      </article>
+      <article class="card card--patch reveal">
+        <span class="card__num">2</span>
+        <p class="card__text mb-0">Получаете теоретическую базу, записи лекционных частей
+        и дополнительные материалы для чтения.</p>
+      </article>
+      <article class="card card--patch reveal">
+        <span class="card__num">3</span>
+        <p class="card__text mb-0">После двух дней интенсивной работы получаете месяц сопровождения
+        в чате, два созвона и ответы на вопросы.</p>
+      </article>
+    </div>
+
+    <div class="swatch mt-3" style="padding:clamp(1.4rem,4vw,2.2rem)">
+      <h3 class="mt-0">Организационные вопросы</h3>
+      <ul class="knit-list">
+        <li>Онлайн-интенсив — 4 и 5 июля (суббота и воскресенье) с 11:00 до 19:00 по Москве, в Zoom.</li>
+        <li>Сопровождение и задания для самостоятельной работы после тренинга — весь июль.</li>
+        <li>Доступ к материалам — навсегда.</li>
+        <li>Общая продолжительность — 32 академических часа.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="course-result-title">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="course-result-title">После курса вы сможете</h2>
+    </div>
+    <div class="grid grid--2">
+      <article class="card card--patch reveal">
+        <span class="card__num">1</span>
+        <p class="card__text mb-0">В партнёрстве с клиентом анализировать и оценивать качество
+        терапевтического альянса и результатов психотерапии.</p>
+      </article>
+      <article class="card card--patch reveal">
+        <span class="card__num">2</span>
+        <p class="card__text mb-0">Определять «проблемные» зоны в работе с клиентами уже на ранних
+        стадиях и предпринимать действия по исправлению ситуации.</p>
+      </article>
+      <article class="card card--patch reveal">
+        <span class="card__num">3</span>
+        <p class="card__text mb-0">Создавать предпосылки для более эффективной терапии и большей
+        приверженности ей уже на первой сессии.</p>
+      </article>
+      <article class="card card--patch reveal">
+        <span class="card__num">4</span>
+        <p class="card__text mb-0">Самостоятельно выявлять и совершенствовать профессиональные
+        «зоны развития».</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section--purl" aria-labelledby="course-program-title">
+  <div class="container container--narrow">
+    <h2 id="course-program-title">Программа обучения</h2>
+    <div class="accordion mt-2">
+      <details class="acc" open>
+        <summary class="acc__summary">Исследования факторов и эффективности психотерапии</summary>
+        <div class="acc__body">
+          <p>Факторы и предикторы эффективности психотерапии, концепция общих факторов, модели
+          и траектории изменений в психотерапии, исследования дропаутов.</p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary class="acc__summary">Преднамеренная практика как методология совершенствования</summary>
+        <div class="acc__body">
+          <p>Преднамеренная практика как ключевой фактор более высокой эффективности одних
+          психотерапевтов относительно других; цикл и таксономия ПП; терапевтические навыки
+          как ключевой фокус ПП.</p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary class="acc__summary">Фасилитативные межличностные навыки</summary>
+        <div class="acc__body">
+          <p>Ключевые исследования и практическая отработка навыков как фактора эффективности
+          психотерапии.</p>
+        </div>
+      </details>
+      <details class="acc">
+        <summary class="acc__summary">Предикторы эффективности и инструменты их оценки</summary>
+        <div class="acc__body">
+          <p>Основные характеристики, функции, области применения и ограничения шкал SRS и ORS;
+          показатели, указывающие на проблемы в терапевтическом альянсе и результатах терапии;
+          действия психотерапевта в ответ на выявленные затруднения.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="course-teacher-title">
+  <div class="container container--narrow">
+    <h2 id="course-teacher-title" class="text-center">Преподаватель</h2>
+    <div class="quote mt-2">
+      <div class="quote__head">
+        %s
+        <div class="quote__who">
+          <span class="quote__name">Михаил Пономарёв</span>
+          <span class="quote__role">Клинический психолог, ориентированный на решение практик,
+          кандидат психологических наук</span>
+        </div>
+      </div>
+      <div class="prose">
+        <p>Доцент кафедры нейро- и патопсихологии, руководитель магистерской программы
+        «Психологическое консультирование» Института психологии им. Л. С. Выготского
+        ФГАОУ ВО «Российский государственный гуманитарный университет».</p>
+        <p>Уже апробировал свой курс «Инструменты повышения эффективности психотерапии» очно
+        в НИУ ВШЭ — повторы пока в листе ожидания.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" aria-labelledby="course-video-title">
+  <div class="container">
+    <h2 id="course-video-title" class="visually-hidden">Видео о курсе</h2>
+    %s
+  </div>
+</section>
+
+<section class="section" id="signup" aria-labelledby="course-signup-title">
+  <div class="container container--narrow">
+    <h2 id="course-signup-title">Записаться на курс</h2>
+    <p class="lead">«Инструменты повышения эффективности психотерапии», 4–5 июля 2026 года.</p>
+    <div class="swatch mt-2" style="padding:clamp(1.4rem,4vw,2.2rem)">
+      <p>Напишите нам — администратор свяжется с вами и уточнит детали.</p>
+      <p class="cluster mb-0">
+        <a class="btn" href="https://t.me/archakova84" target="_blank" rel="noopener noreferrer">Написать в Telegram</a>
+        <a class="btn btn--ghost" href="mailto:%s?subject=%s">Написать на почту</a>
+      </p>
+    </div>
+    <p class="full-bleed-note mt-2">Отправляя заявку, вы соглашаетесь на
+    <a href="%s" target="_blank" rel="noopener noreferrer">обработку персональных данных</a>.</p>
+  </div>
+</section>
+
+<section class="section section--purl" id="pay" aria-labelledby="course-pay-title">
+  <div class="container container--narrow">
+    <h2 id="course-pay-title">Оплатить курс</h2>
+    <div class="donate-widget mt-2">
+      %s
+    </div>
+    <p class="cluster mt-2">
+      <a class="btn btn--ghost" href="https://t.me/archakova84" target="_blank" rel="noopener noreferrer">Договориться о рассрочке</a>
+    </p>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="course-article-title">
+  <div class="container container--narrow">
+    <div class="swatch" style="padding:clamp(1.4rem,4vw,2.2rem)">
+      <h2 id="course-article-title" class="mt-0">Использование шкал обратной связи в индивидуальной психотерапии</h2>
+      <p>Подробная статья на основе мастер-класса Михаила Пономарёва для Нарративной мастерской.</p>
+      <p class="mb-0"><a class="btn" href="https://narrative.team/scala_oaf_fedback" target="_blank" rel="noopener noreferrer">Читать статью</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--purl" aria-labelledby="course-review-title">
+  <div class="container container--narrow">
+    <h2 id="course-review-title" class="text-center">Отзыв участницы</h2>
+    <div class="quote mt-2">
+      <div class="quote__head">
+        %s
+        <div class="quote__who">
+          <span class="quote__name">Наталья Литвинова</span>
+          <span class="quote__role">Участница курса «Инструменты повышения эффективности
+          психотерапии», который Михаил проводил на базе НИУ ВШЭ</span>
+        </div>
+      </div>
+      <div class="prose">
+        <p>Я под большим впечатлением от двухдневного тренинга «Инструменты повышения эффективности
+        психотерапии». По соотношению затраченных усилий, ресурсов, полученной информации,
+        отработанных навыков и инсайтов — 10 из 10!</p>
+        <p>Было много науки и много практики. Вся информация научно обоснована и статистически
+        проверена, но при этом супер полезна, нужна и применима в работе. В общем, всё как я люблю —
+        бери и делай.</p>
+      </div>
+    </div>
+  </div>
+</section>
+""" % (
+        img("course-cover.jpg",
+            "Михаил Пономарёв выступает с микрофоном перед аудиторией, чёрно-белое фото",
+            eager=True),
+        img("course-ponomarev.jpg", "Портрет: Михаил Пономарёв", "quote__avatar"),
+        video_embed(
+            RUTUBE_COURSE_VIDEO,
+            img("course-banner.jpg",
+                "Кадр из видео о курсе: шкала оценки результата и Михаил Пономарёв",
+                "video__poster"),
+            "", "Смотреть видео о курсе"),
+        ORG["email"], "Запись%20на%20курс%20«Инструменты%20повышения%20эффективности%20психотерапии»",
+        PDF["privacy_policy"],
+        yookassa_form(),
+        img("course-review.png", "Фотография участницы курса Натальи Литвиновой", "quote__avatar"),
+    ),
+)
+
+
 # ------------------------------------------------- демо мотива «амигуруми»
 
 _AMI_YARNS = [
@@ -2226,14 +2586,30 @@ REDIRECT_TMPL = """<!DOCTYPE html>
 def main() -> int:
     written = []
 
-    for p in PAGES:
+    pages = [p for p in PAGES if SHOW_CASE_PAGES or p["slug"] not in CASE_SLUGS]
+    removed = [p["slug"] for p in PAGES if p["slug"] not in [q["slug"] for q in pages]]
+
+    # Старые адреса Craftum не должны вести на несуществующие страницы
+    redirects = dict(REDIRECTS)
+    if not SHOW_CASE_PAGES:
+        for old, new in list(redirects.items()):
+            if new in CASE_SLUGS:
+                redirects[old] = "donate.html"
+
+    for p in pages:
         out = render_page(p)
         path = os.path.join(ROOT, p["slug"])
         with open(path, "w", encoding="utf-8", newline="\n") as f:
             f.write(out)
         written.append((p["slug"], len(out)))
 
-    for old, new in REDIRECTS.items():
+    # убираем файлы отключённых страниц, чтобы в сборке не осталось старых копий
+    for slug in removed:
+        stale = os.path.join(ROOT, slug)
+        if os.path.exists(stale):
+            os.remove(stale)
+
+    for old, new in redirects.items():
         body = REDIRECT_TMPL % (ORG["name"], SITE_URL, new, new,
                                 asset("assets/css/knit.css"), new,
                                 '"' + new + '"')
@@ -2243,7 +2619,7 @@ def main() -> int:
 
     # sitemap + robots
     urls = "\n".join(
-        "  <url><loc>%s/%s</loc></url>" % (SITE_URL, p["slug"]) for p in PAGES
+        "  <url><loc>%s/%s</loc></url>" % (SITE_URL, p["slug"]) for p in pages
     )
     sitemap = ('<?xml version="1.0" encoding="UTF-8"?>\n'
                '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -2259,7 +2635,9 @@ def main() -> int:
     with open(os.path.join(ROOT, ".nojekyll"), "w", encoding="utf-8") as f:
         f.write("")
 
-    print("Собрано страниц: %d, редиректов: %d" % (len(PAGES), len(REDIRECTS)))
+    print("Собрано страниц: %d, редиректов: %d" % (len(pages), len(redirects)))
+    if removed:
+        print("Отключены (SHOW_CASE_PAGES=1 вернёт): %s" % ", ".join(removed))
     print("Адрес сайта: %s" % SITE_URL)
     print("Счётчики: Яндекс.Метрика — %s, Top.Mail.Ru — %s" % (
         "задан" if ANALYTICS["yandex_metrika_id"] else "нет (заглушка)",

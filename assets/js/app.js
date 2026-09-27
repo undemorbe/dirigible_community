@@ -53,7 +53,8 @@
     });
 
     // переход в десктопный режим — сбрасываем состояние
-    var desktop = window.matchMedia('(min-width: 1024px)');
+    // держать в паре с брейкпоинтом меню в knit.css
+    var desktop = window.matchMedia('(min-width: 1080px)');
     var onChange = function (e) { if (e.matches) close(); };
     if (desktop.addEventListener) desktop.addEventListener('change', onChange);
     else if (desktop.addListener) desktop.addListener(onChange);
@@ -220,6 +221,33 @@
     }, 400);
   }
 
+  /* ------------------------------------------------------------- видео */
+  /* Плеер RuTube подставляется только по клику: до этого не грузим сторонний
+     iframe и его куки, а страница остаётся лёгкой. Постер виден и без JS. */
+  function initVideo(root) {
+    var boxes = (root || document).querySelectorAll('[data-video]');
+    Array.prototype.forEach.call(boxes, function (box) {
+      var btn = box.querySelector('[data-video-play]');
+      var src = box.getAttribute('data-video-src');
+      if (!btn || !src || box.getAttribute('data-state') === 'playing') return;
+
+      btn.addEventListener('click', function () {
+        var frame = document.createElement('iframe');
+        frame.src = src;
+        frame.title = btn.getAttribute('aria-label') || 'Видео';
+        frame.allow = 'autoplay; fullscreen; picture-in-picture';
+        frame.setAttribute('allowfullscreen', '');
+        frame.loading = 'lazy';
+
+        var poster = box.querySelector('.video__poster');
+        if (poster) poster.remove();
+        box.appendChild(frame);
+        box.setAttribute('data-state', 'playing');
+        frame.focus({ preventScroll: true });
+      });
+    });
+  }
+
   /* ----------------------------------------- активный пункт навигации */
   function markCurrentNav() {
     var here = location.pathname.split('/').pop() || 'index.html';
@@ -236,6 +264,7 @@
     initCarousels();
     initReveal();
     initDonateFallback();
+    initVideo();
     markCurrentNav();
   }
 
@@ -243,5 +272,6 @@
   else boot();
 
   // Публичное API — используется articles.js для доинициализации новых карточек.
-  window.Dirigible = { initCarousels: initCarousels, initReveal: initReveal, reduceMotion: reduceMotion };
+  window.Dirigible = { initCarousels: initCarousels, initReveal: initReveal,
+                      initVideo: initVideo, reduceMotion: reduceMotion };
 })();

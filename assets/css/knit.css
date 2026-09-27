@@ -369,6 +369,7 @@ p:last-child { margin-bottom: 0; }
 .nav__list { list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem; }
 .nav__link {
   display: flex; align-items: center; gap: .6rem;
+  white-space: nowrap;
   padding: .8rem 1rem;
   border-radius: var(--r-md);
   font-weight: 700; text-decoration: none; color: var(--ink);
@@ -393,7 +394,10 @@ p:last-child { margin-bottom: 0; }
 }
 .nav-backdrop.is-open { opacity: 1; visibility: visible; }
 
-@media (min-width: 1024px) {
+/* 1080, а не 1024: на ровно 1024 пункты меню и кнопка «Помочь» уже
+   не помещаются в строку и названия ломаются пополам.
+   Значение продублировано в app.js — менять обе точки вместе. */
+@media (min-width: 1080px) {
   .nav-toggle { display: none; }
   .nav-backdrop { display: none; }
   .nav {
@@ -626,6 +630,60 @@ p:last-child { margin-bottom: 0; }
   background: var(--wool-400); transition: background-color .2s, transform .2s;
 }
 .carousel__dot[aria-current="true"] { background: var(--yarn-orange); transform: scale(1.35); }
+
+/* ----------------------------------------------------------------- видео */
+/* Постер + кнопка play; сам iframe подставляет app.js по клику. */
+.video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  padding: 10px;
+}
+.video__poster,
+.video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: calc(var(--r-xl) - 10px);
+  object-fit: cover;
+  display: block;
+}
+
+.video__play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 84px;
+  height: 84px;
+  display: grid;
+  place-content: center;
+  padding-left: 6px;              /* оптическая компенсация треугольника */
+  border: 0;
+  border-radius: var(--r-pill);
+  background: var(--yarn-orange);
+  color: #fff;
+  box-shadow:
+    inset 0 0 0 3px color-mix(in srgb, #fff 55%, transparent),
+    0 4px 0 color-mix(in srgb, var(--wool-400) 70%, transparent),
+    0 18px 36px -14px color-mix(in srgb, var(--ink) 55%, transparent);
+  transition: transform .2s var(--ease), background-color .2s;
+}
+.video__play::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 2px dashed color-mix(in srgb, #fff 65%, transparent);
+  border-radius: var(--r-pill);
+  pointer-events: none;
+}
+.video__play:hover { transform: translate(-50%, -50%) scale(1.06); background: var(--yarn-orange-deep); }
+.video__play:active { transform: translate(-50%, -50%) scale(.97); }
+.video[data-state="playing"] .video__play { display: none; }
+
+@media (max-width: 520px) {
+  .video__play { width: 64px; height: 64px; }
+}
 
 /* --------------------------------------------------------------- галерея */
 .gallery { display: grid; gap: var(--gap); grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
