@@ -119,10 +119,9 @@ PDF = {
     "offer": CDN + "4bc5be66-e154-45ba-bb2f-7094e44986e2.pdf",
     "charter": CDN + "16f042a9-66f9-4773-81ee-72b2cd18157d.pdf",
     "report_2024": CDN + "60bdecb3-a7a0-4504-9414-dface3e9f00e.pdf",
-    # В обновлённой выгрузке «Отчёт 2025» ссылается на тот же файл, что и 2024 —
-    # так на стороне Craftum. Когда организация загрузит отдельный PDF,
-    # заменить ссылку здесь.
-    "report_2025": CDN + "60bdecb3-a7a0-4504-9414-dface3e9f00e.pdf",
+    # Отчёт за 2025 лежит локально: в выгрузке Craftum он ошибочно ссылался
+    # на файл 2024 года, поэтому берём загруженный заказчиком PDF.
+    "report_2025": "assets/docs/otchet-2025.pdf",
     "prolong_2023": CDN + "ce0761c4-c3e5-4b10-b4c4-b89f200295f9.pdf",
     "prolong_2024": CDN + "232fed0a-db1e-4128-9f4a-349d77bd9db3.pdf",
     "edu_transfer": CDN + "bfb77bb3-174c-4e81-afe3-10b8db0b55de.pdf",
@@ -259,9 +258,11 @@ def yarn(cls: str) -> str:
 
 
 def doc_link(href: str, title: str, meta: str = "PDF") -> str:
-    external = href.startswith("http")
-    rel = ' target="_blank" rel="noopener noreferrer"' if external else ""
-    hint = ' <span class="visually-hidden">(откроется в новой вкладке)</span>' if external else ""
+    # Документы открываем в новой вкладке — и внешние, и локальные PDF:
+    # иначе посетитель уходит с сайта в просмотрщик и теряет навигацию.
+    new_tab = href.startswith("http") or href.lower().endswith(".pdf")
+    rel = ' target="_blank" rel="noopener noreferrer"' if new_tab else ""
+    hint = ' <span class="visually-hidden">(откроется в новой вкладке)</span>' if new_tab else ""
     return (
         '<a class="doc-link" href="%s"%s>'
         '<span class="doc-link__icon">%s</span>'
@@ -1491,8 +1492,8 @@ page(
   <div class="container">
     <p class="eyebrow">Прозрачность</p>
     <h1>Отчёты</h1>
-    <p class="lead" style="max-width:58ch">Наш отчёт за 2023 год — первый год существования
-    организации.</p>
+    <p class="lead" style="max-width:58ch">Публикуем годовые отчёты с первого года работы
+    организации — 2023-го. Новые сверху.</p>
   </div>
 </section>
 
@@ -1520,11 +1521,12 @@ page(
 
 %s
 """ % (
-        doc_link(REPORT_2023, "Отчёт 2023", "Облако Mail.ru"),
-        doc_link(PDF["report_2024"], "Отчёт 2024"),
+        # обратный хронологический порядок: свежий отчёт первым
         doc_link(PDF["report_2025"], "Отчёт 2025"),
-        doc_link(PDF["prolong_2023"], "Продление деятельности 2023"),
+        doc_link(PDF["report_2024"], "Отчёт 2024"),
+        doc_link(REPORT_2023, "Отчёт 2023", "Облако Mail.ru"),
         doc_link(PDF["prolong_2024"], "Продление деятельности 2024"),
+        doc_link(PDF["prolong_2023"], "Продление деятельности 2023"),
         donate_cta("Помогите нам продолжать",
                    "Отчёты показывают, что уже сделано. Ваша поддержка определяет, что будет дальше."),
     ),
