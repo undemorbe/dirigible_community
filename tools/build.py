@@ -14,8 +14,10 @@
 
 from __future__ import annotations
 
+import datetime
 import hashlib
 import html
+import json
 import os
 import re
 import struct
@@ -316,6 +318,120 @@ def analytics_noscript() -> str:
     return ("\n".join(out) + "\n") if out else ""
 
 
+def json_ld(page: dict) -> str:
+    """Структурированные данные Schema.org.
+
+    Организация описана как NGO — так поисковики показывают карточку
+    с контактами и логотипом. На странице курса дополнительно Course,
+    на главной — WebSite. Пишем JSON вручную (json.dumps с ensure_ascii=False),
+    чтобы не тянуть зависимости.
+    """
+    org = {
+        "@type": "NGO",
+        "@id": SITE_URL + "/#organization",
+        "name": ORG["full_name"],
+        "alternateName": ORG["name"],
+        "url": SITE_URL + "/",
+        "logo": SITE_URL + "/assets/img/media/logo.png",
+        "image": SITE_URL + "/assets/img/media/hero-figures.jpg",
+        "email": ORG["email"],
+        "telephone": "+7" + ORG["phone_href"].lstrip("+7"),
+        "taxID": ORG["inn"],
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "RU",
+            "addressLocality": "Москва",
+            "streetAddress": "проспект Мира, д. 202А, кв. 40",
+            "postalCode": "129128",
+        },
+        "sameAs": [url for _, url, _ in SOCIALS],
+        "description": "Помогаем людям строить и укреплять «сеть поддержки» из родных, "
+                       "друзей и помогающих специалистов.",
+    }
+
+    graph = [org]
+
+    if page["slug"] == "index.html":
+        graph.append({
+            "@type": "WebSite",
+            "@id": SITE_URL + "/#website",
+            "url": SITE_URL + "/",
+            "name": ORG["name"],
+            "inLanguage": "ru-RU",
+            "publisher": {"@id": SITE_URL + "/#organization"},
+        })
+
+    if page["slug"] == "effective.html":
+        graph.append({
+            "@type": "Course",
+            "name": "Инструменты повышения эффективности психотерапии",
+            "description": page["description"],
+            "url": SITE_URL + "/effective.html",
+            "provider": {"@id": SITE_URL + "/#organization"},
+            "inLanguage": "ru-RU",
+            "offers": {
+                "@type": "Offer",
+                "price": "17500",
+                "priceCurrency": "RUB",
+                "category": "Повышение квалификации",
+                "url": SITE_URL + "/effective.html#pay",
+            },
+            "hasCourseInstance": {
+                "@type": "CourseInstance",
+                "courseMode": "online",
+                "courseWorkload": "PT32H",
+                "instructor": {"@type": "Person", "name": "Михаил Пономарёв"},
+            },
+        })
+
+    if page["slug"] == "program.html":
+        graph.append({
+            "@type": "Course",
+            "name": "Методы и инструменты исследования и активизации социального окружения "
+                    "детей и семей",
+            "description": page["description"],
+            "url": SITE_URL + "/program.html",
+            "provider": {"@id": SITE_URL + "/#organization"},
+            "inLanguage": "ru-RU",
+            "hasCourseInstance": {
+                "@type": "CourseInstance",
+                "courseMode": "online",
+                "courseWorkload": "PT72H",
+            },
+        })
+
+    data = {"@context": "https://schema.org", "@graph": graph}
+    return ('<script type="application/ld+json">%s</script>\n'
+            % json.dumps(data, ensure_ascii=False, separators=(",", ":")))
+
+
+# Картинка для соцсетей по страницам. Где не задано — общая с главной.
+OG_IMAGES = {
+    "effective.html": "course-banner.jpg",
+    "research.html": "research-cover.jpg",
+    "survey-clients.html": "survey-clients.jpg",
+    "survey-specialists.html": "survey-specialists.jpg",
+    "documents.html": "doc-registration.jpg",
+    "news.html": "news-songbook.jpg",
+}
+
+# Служебные страницы, которые не должны попадать в поиск
+NOINDEX_SLUGS = ("knit-demo.html",)
+
+
+def robots_meta(page: dict) -> str:
+    """Служебные страницы прячем от поиска, остальным — явное разрешение."""
+    if page.get("noindex") or page["slug"] in NOINDEX_SLUGS:
+        return '<meta name="robots" content="noindex, nofollow">\n'
+    return '<meta name="robots" content="index, follow, max-image-preview:large">\n'
+
+
+def canonical_path(slug: str) -> str:
+    """Главная канонизируется на корень: / и /index.html — один и тот же
+    документ, и без этого поисковик видит дубль."""
+    return "" if slug == "index.html" else slug
+
+
 def render_head(page: dict) -> str:
     title = page["title"]
     full_title = title if page["slug"] == "index.html" else title + " — " + ORG["name"]
@@ -336,10 +452,11 @@ def render_head(page: dict) -> str:
 <meta property="og:title" content="%s">
 <meta property="og:description" content="%s">
 <meta property="og:url" content="%s/%s">
-<meta property="og:image" content="%s/assets/img/media/hero-figures.jpg">
+<meta property="og:image" content="%s/assets/img/media/%s">
+<meta property="og:image:alt" content="%s">
 <meta property="og:locale" content="ru_RU">
 <meta name="twitter:card" content="summary_large_image">
-
+%s
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/img/media/logo.png">
 
@@ -347,14 +464,17 @@ def render_head(page: dict) -> str:
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&amp;family=Nunito:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap&amp;subset=cyrillic,cyrillic-ext,latin">
 <link rel="stylesheet" href="%s">
-%s%s</head>
+%s%s%s</head>
 <body>
 <a class="skip-link" href="#main">Перейти к содержимому</a>
 %s""" % (
-        esc(full_title), esc(page["description"]), SITE_URL, page["slug"],
+        esc(full_title), esc(page["description"]), SITE_URL, canonical_path(page["slug"]),
         esc(ORG["name"]), esc(full_title), esc(page["description"]),
-        SITE_URL, page["slug"], SITE_URL, asset("assets/css/knit.css"),
-        analytics_config(), extra_css, analytics_noscript(),
+        SITE_URL, canonical_path(page["slug"]),
+        SITE_URL, OG_IMAGES.get(page["slug"], "hero-figures.jpg"), esc(page["description"]),
+        robots_meta(page),
+        asset("assets/css/knit.css"),
+        json_ld(page), analytics_config(), extra_css, analytics_noscript(),
     )
 
 
@@ -2311,6 +2431,42 @@ page(
 )
 
 
+# ----------------------------------------------------------------- 404
+
+page(
+    "404.html",
+    "Страница не найдена",
+    "Такой страницы на сайте нет. Возможно, она переехала — вернитесь на главную "
+    "или выберите раздел.",
+    """
+<section class="section">
+  <div class="container container--narrow text-center">
+    <p class="eyebrow">Ошибка 404</p>
+    <h1>Похоже, здесь спустилась петля</h1>
+    <p class="lead center-x" style="max-width:52ch">Такой страницы на сайте нет. Возможно,
+    она переехала или адрес набран с опечаткой.</p>
+    <p class="cluster cluster--center mt-2">
+      <a class="btn btn--lg" href="index.html">На главную</a>
+      <a class="btn btn--ghost btn--lg" href="donate.html">Помочь</a>
+    </p>
+
+    <div class="cable-divider mt-3" role="presentation"></div>
+
+    <h2>Куда можно перейти</h2>
+    <ul class="knit-list mt-2" style="text-align:left;max-width:40ch;margin-inline:auto">
+      <li><a href="about.html">О нас</a> — миссия, история и команда</li>
+      <li><a href="news.html">Новости</a> — проекты и «не-истории»</li>
+      <li><a href="research.html">Исследование</a> — процедурная справедливость и опросники</li>
+      <li><a href="education.html">Обучение</a> — программы и лицензия</li>
+      <li><a href="documents.html">Документы</a> — реквизиты и уставные документы</li>
+    </ul>
+  </div>
+</section>
+""",
+    noindex=True,
+)
+
+
 # ------------------------------------------------- демо мотива «амигуруми»
 
 _AMI_YARNS = [
@@ -2618,8 +2774,26 @@ def main() -> int:
         written.append((old, len(body)))
 
     # sitemap + robots
+    # В карту сайта не попадают служебные страницы (404, демо мотива).
+    # lastmod берём из даты сборки — для статики это честнее, чем выдумывать
+    # даты правок отдельных страниц.
+    today = datetime.date.today().isoformat()
+    indexable = [p for p in pages
+                 if not p.get("noindex") and p["slug"] not in NOINDEX_SLUGS]
+
+    def priority(slug):
+        if slug == "index.html":
+            return "1.0"
+        if slug in ("donate.html", "about.html", "effective.html"):
+            return "0.9"
+        if slug in ("news.html", "research.html", "education.html"):
+            return "0.8"
+        return "0.6"
+
     urls = "\n".join(
-        "  <url><loc>%s/%s</loc></url>" % (SITE_URL, p["slug"]) for p in pages
+        '  <url><loc>%s/%s</loc><lastmod>%s</lastmod><priority>%s</priority></url>'
+        % (SITE_URL, canonical_path(p["slug"]), today, priority(p["slug"]))
+        for p in indexable
     )
     sitemap = ('<?xml version="1.0" encoding="UTF-8"?>\n'
                '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -2627,9 +2801,27 @@ def main() -> int:
     with open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8", newline="\n") as f:
         f.write(sitemap)
 
-    robots = "User-agent: *\nAllow: /\nSitemap: %s/sitemap.xml\n" % SITE_URL
+    robots = (
+        "User-agent: *\n"
+        "Allow: /\n"
+        "Disallow: /knit-demo.html\n"
+        "Disallow: /404.html\n"
+        "\n"
+        "Sitemap: %s/sitemap.xml\n" % SITE_URL
+    )
     with open(os.path.join(ROOT, "robots.txt"), "w", encoding="utf-8", newline="\n") as f:
         f.write(robots)
+
+    # CNAME нужен GitHub Pages, чтобы отдавать сайт на своём домене.
+    # На github.io-адресе файл только мешает, поэтому пишем его лишь
+    # когда SITE_URL указывает на собственный домен.
+    host = SITE_URL.split("//", 1)[-1].split("/", 1)[0]
+    cname_path = os.path.join(ROOT, "CNAME")
+    if host and not host.endswith("github.io"):
+        with open(cname_path, "w", encoding="utf-8", newline="\n") as f:
+            f.write(host + "\n")
+    elif os.path.exists(cname_path):
+        os.remove(cname_path)
 
     # GitHub Pages иначе прогоняет вывод через Jekyll
     with open(os.path.join(ROOT, ".nojekyll"), "w", encoding="utf-8") as f:
