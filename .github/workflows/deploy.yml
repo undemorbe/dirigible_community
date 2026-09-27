@@ -46,6 +46,12 @@ jobs:
           TOP_MAIL_RU_ID: ${{ secrets.TOP_MAIL_RU_ID }}
           DONATION_WIDGET_ID: ${{ secrets.DONATION_WIDGET_ID }}
           DONATION_FORM_ID: ${{ secrets.DONATION_FORM_ID }}
+          DONATION_FORM_ID_VANYA: ${{ secrets.DONATION_FORM_ID_VANYA }}
+          DONATION_FORM_ID_BROTHERS: ${{ secrets.DONATION_FORM_ID_BROTHERS }}
+          YOOKASSA_SHOP_ID: ${{ secrets.YOOKASSA_SHOP_ID }}
+          # Страницы адресных сборов: задайте переменную SHOW_CASE_PAGES=1,
+          # чтобы вернуть их на сайт
+          SHOW_CASE_PAGES: ${{ vars.SHOW_CASE_PAGES }}
         run: python3 tools/build.py
 
       - name: Проверить сборку
