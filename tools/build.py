@@ -319,6 +319,26 @@ def analytics_noscript() -> str:
     return ("\n".join(out) + "\n") if out else ""
 
 
+# Путь до страницы: (файл, подпись). Первый элемент — всегда главная.
+BREADCRUMBS = {
+    "program.html": [("index.html", "Главная"), ("education.html", "Обучение"),
+                     ("program.html", "Программа повышения квалификации")],
+    "effective.html": [("index.html", "Главная"), ("education.html", "Обучение"),
+                       ("effective.html", "Инструменты повышения эффективности психотерапии")],
+    "survey-clients.html": [("index.html", "Главная"), ("research.html", "Исследование"),
+                            ("survey-clients.html", "Опросник для клиентов")],
+    "survey-specialists.html": [("index.html", "Главная"), ("research.html", "Исследование"),
+                                ("survey-specialists.html", "Опросник для специалистов")],
+    "education.html": [("index.html", "Главная"), ("education.html", "Обучение")],
+    "research.html": [("index.html", "Главная"), ("research.html", "Исследование")],
+    "donate.html": [("index.html", "Главная"), ("donate.html", "Помочь")],
+    "reports.html": [("index.html", "Главная"), ("reports.html", "Отчёты")],
+    "documents.html": [("index.html", "Главная"), ("documents.html", "Документы")],
+    "news.html": [("index.html", "Главная"), ("news.html", "Новости")],
+    "about.html": [("index.html", "Главная"), ("about.html", "О нас")],
+}
+
+
 def json_ld(page: dict) -> str:
     """Структурированные данные Schema.org.
 
@@ -348,6 +368,16 @@ def json_ld(page: dict) -> str:
         "sameAs": [url for _, url, _ in SOCIALS],
         "description": "Помогаем людям строить и укреплять «сеть поддержки» из родных, "
                        "друзей и помогающих специалистов.",
+        "foundingDate": "2023-04-21",
+        "areaServed": {"@type": "Country", "name": "Россия"},
+        "knowsLanguage": "ru",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer support",
+            "email": ORG["email"],
+            "telephone": ORG["phone"],
+            "availableLanguage": "Russian",
+        },
     }
 
     graph = [org]
@@ -401,9 +431,76 @@ def json_ld(page: dict) -> str:
             },
         })
 
+    # Хлебные крошки: показываются в выдаче вместо голого URL и помогают
+    # поисковику понять вложенность разделов.
+    if page["slug"] in BREADCRUMBS:
+        trail = BREADCRUMBS[page["slug"]]
+        graph.append({
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": i + 1,
+                    "name": name,
+                    "item": SITE_URL + "/" + canonical_path(slug),
+                }
+                for i, (slug, name) in enumerate(trail)
+            ],
+        })
+
     data = {"@context": "https://schema.org", "@graph": graph}
     return ('<script type="application/ld+json">%s</script>\n'
             % json.dumps(data, ensure_ascii=False, separators=(",", ":")))
+
+
+# Ключевые слова по страницам. Вес у meta keywords сегодня низкий (Google их
+# игнорирует, Яндекс учитывает слабо), но для тематических агрегаторов и
+# внутреннего поиска поле по-прежнему читают. Основную работу делают
+# title, description, H1 и сам текст.
+KEYWORDS = {
+    "index.html": "сеть социальных контактов, сетевые встречи, помощь семьям в кризисе, "
+                  "АНО Дирижабль, профилактика социального сиротства, поддержка семьи, НКО Москва",
+    "about.html": "АНО Дирижабль, центр развития социальных практик, работа с сетью социальных "
+                  "контактов, сетевая терапия, команда, история организации",
+    "news.html": "новости НКО, работа с семьями, сетевые встречи, обучение специалистов, "
+                 "Дирижабль новости",
+    "research.html": "процедурная справедливость, совместное принятие решений, социальная работа "
+                     "с детьми и семьями, исследование, семейные конференции, круги сообщества",
+    "survey-clients.html": "опросник для родителей, опросник для подростков, процедурная "
+                           "справедливость, исследование социальной работы",
+    "survey-specialists.html": "опросник для специалистов, стиль работы, справедливый процесс "
+                               "принятия решений, социальная работа",
+    "donate.html": "пожертвование, помочь фонду, благотворительность, поддержать НКО, "
+                   "помощь семьям, АНО Дирижабль реквизиты",
+    "reports.html": "годовой отчёт НКО, отчётность, прозрачность, АНО Дирижабль отчёт",
+    "documents.html": "реквизиты, устав, ИНН, ОГРН, документы НКО, персональные данные, оферта",
+    "education.html": "повышение квалификации, обучение специалистов, лицензия на образовательную "
+                      "деятельность, ДПО, ресурсный центр, социальная работа обучение",
+    "program.html": "программа повышения квалификации, 72 часа, карта социальных контактов, "
+                    "генограмма, социально-экологический подход, Бронфенбреннер",
+    "effective.html": "эффективность психотерапии, шкалы ORS SRS, преднамеренная практика, "
+                      "обратная связь в терапии, повышение квалификации психологов, "
+                      "Михаил Пономарёв, курс для психологов",
+}
+
+# Подтверждение прав в Яндекс.Вебмастере и Google Search Console.
+# Без них сайт индексируется медленно и нет данных по запросам.
+YANDEX_VERIFICATION = os.environ.get("YANDEX_VERIFICATION", "").strip()
+GOOGLE_VERIFICATION = os.environ.get("GOOGLE_VERIFICATION", "").strip()
+
+
+def verification_meta() -> str:
+    out = []
+    if YANDEX_VERIFICATION:
+        out.append('<meta name="yandex-verification" content="%s">' % esc(YANDEX_VERIFICATION))
+    if GOOGLE_VERIFICATION:
+        out.append('<meta name="google-site-verification" content="%s">' % esc(GOOGLE_VERIFICATION))
+    return ("\n".join(out) + "\n") if out else ""
+
+
+def keywords_meta(page: dict) -> str:
+    kw = KEYWORDS.get(page["slug"])
+    return ('<meta name="keywords" content="%s">\n' % esc(kw)) if kw else ""
 
 
 # Картинка для соцсетей по страницам. Где не задано — общая с главной.
@@ -445,7 +542,7 @@ def render_head(page: dict) -> str:
 <script>document.documentElement.classList.add("js")</script>
 <title>%s</title>
 <meta name="description" content="%s">
-<meta name="theme-color" content="#FBF6EC">
+%s%s<meta name="theme-color" content="#FBF6EC">
 <link rel="canonical" href="%s/%s">
 
 <meta property="og:type" content="website">
@@ -469,7 +566,9 @@ def render_head(page: dict) -> str:
 <body>
 <a class="skip-link" href="#main">Перейти к содержимому</a>
 %s""" % (
-        esc(full_title), esc(page["description"]), SITE_URL, canonical_path(page["slug"]),
+        esc(full_title), esc(page["description"]),
+        keywords_meta(page), verification_meta(),
+        SITE_URL, canonical_path(page["slug"]),
         esc(ORG["name"]), esc(full_title), esc(page["description"]),
         SITE_URL, canonical_path(page["slug"]),
         SITE_URL, OG_IMAGES.get(page["slug"], "hero-figures.jpg"), esc(page["description"]),
