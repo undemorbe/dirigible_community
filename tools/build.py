@@ -2916,9 +2916,12 @@ def main() -> int:
     # CNAME нужен GitHub Pages, чтобы отдавать сайт на своём домене.
     # На github.io-адресе файл только мешает, поэтому пишем его лишь
     # когда SITE_URL указывает на собственный домен.
+    # Платформенные домены обслуживаются хостингом сами; CNAME нужен только
+    # когда сайт стоит на собственном домене у GitHub Pages.
+    PLATFORM_HOSTS = (".github.io", ".pages.dev", ".netlify.app", ".vercel.app")
     host = SITE_URL.split("//", 1)[-1].split("/", 1)[0]
     cname_path = os.path.join(ROOT, "CNAME")
-    if host and not host.endswith("github.io"):
+    if host and not host.endswith(PLATFORM_HOSTS):
         with open(cname_path, "w", encoding="utf-8", newline="\n") as f:
             f.write(host + "\n")
     elif os.path.exists(cname_path):

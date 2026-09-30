@@ -131,6 +131,28 @@ donation.ru отдельные формы и указать их id в `DONATION
 
 Из артефакта исключаются `legacy/`, `tools/` и `*.md` — на проде они не нужны.
 
+## Хостинг
+
+Сайт может жить на двух площадках одновременно — исходник один.
+
+**GitHub Pages** — `.github/workflows/deploy.yml`, деплой при пуше в `main`.
+Адрес: https://undemorbe.github.io/dirigible_community/
+
+**Cloudflare Pages** — подключается к тому же репозиторию:
+
+| Поле | Значение |
+|---|---|
+| Framework preset | None |
+| Build command | `bash tools/build_site.sh` |
+| Build output directory | `_site` |
+
+Переменные окружения задаются в разделе Settings → Environment variables: те же
+`YANDEX_METRIKA_ID`, `TOP_MAIL_RU_ID`, `DONATION_WIDGET_ID`, `DONATION_FORM_ID`,
+`YOOKASSA_SHOP_ID`, плюс `SITE_URL` с адресом площадки.
+
+`tools/build_site.sh` раскладывает готовый сайт в `_site/`, исключая `legacy/`, `tools/`,
+`.env` и заметки — раздавать корень репозитория наружу нельзя.
+
 ## Демонстрация мотива
 
 `knit-demo.html` — отдельная страница с более объёмным вариантом вязаного стиля: полотна
