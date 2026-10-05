@@ -33,7 +33,6 @@
   border: 0; border-radius: 0; box-shadow: none; text-transform: none; }
 
 /* --- assets/css/knit.css, заскоуплен под .dzb --- */
-@charset "UTF-8";
 
 
 
@@ -106,7 +105,7 @@
   min-height: 100svh;
   background-color: var(--wool-50) !important;
   background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") !important;
-  background-size: 44px 33px;
+  background-size: 44px 33px !important;
   color: var(--ink) !important;
   font-family: "Nunito", "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif !important;
   font-size: clamp(1rem, .96rem + .25vw, 1.125rem) !important;
@@ -121,16 +120,16 @@
 .dzb img, .dzb svg, .dzb video { display: block; max-width: 100%; height: auto; }
 .dzb img { background-color: var(--wool-100) !important; }
 
-.dzb button, .dzb input, .dzb select, .dzb textarea { font: inherit; color: inherit !important; }
+.dzb button, .dzb input, .dzb select, .dzb textarea { font: inherit !important; color: inherit !important; }
 .dzb button { cursor: pointer; }
 
-.dzb a { color: var(--accent-deep) !important; text-decoration-thickness: 1.5px; text-underline-offset: .22em; }
+.dzb a { color: var(--accent-deep) !important; text-decoration-thickness: 1.5px !important; text-underline-offset: .22em; }
 .dzb a:hover { color: var(--yarn-orange-deep) !important; }
 
 
 .dzb :focus-visible {
-  outline: 3px dashed var(--yarn-orange);
-  outline-offset: 3px;
+  outline: 3px dashed var(--yarn-orange) !important;
+  outline-offset: 3px !important;
   border-radius: var(--r-sm) !important;
 }
 
@@ -152,9 +151,9 @@
 
 
 
-.dzb .knit-stockinette { background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") !important; background-size: 44px 33px; }
+.dzb .knit-stockinette { background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") !important; background-size: 44px 33px !important; }
 
-.dzb .knit-seed { background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg") !important; background-size: 30px 30px; }
+.dzb .knit-seed { background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg") !important; background-size: 30px 30px !important; }
 
 .dzb .knit-rib {
   background-image:
@@ -170,7 +169,7 @@
   position: relative;
   background-color: var(--wool-100) !important;
   background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") !important;
-  background-size: 44px 33px;
+  background-size: 44px 33px !important;
   border-radius: var(--r-lg) !important;
   box-shadow: var(--shadow-1) !important;
   overflow: hidden;
@@ -190,8 +189,8 @@
   height: 26px;
   color: var(--yarn-mustard) !important;
   background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-cable.svg") !important;
-  background-repeat: repeat-x;
-  background-size: auto 26px;
+  background-repeat: repeat-x !important;
+  background-size: auto 26px !important;
   opacity: .55;
   margin-block: clamp(1.5rem, 5vw, 3rem);
 }
@@ -244,15 +243,15 @@
 .dzb .eyebrow::before {
   content: ""; width: 28px; height: 4px; flex: none; border-radius: var(--r-pill) !important;
   background-image: linear-gradient(90deg, var(--yarn-orange) 0 58%, transparent 58%) !important;
-  background-size: 9px 4px;
+  background-size: 9px 4px !important;
 }
 
 
 .dzb .stitched-title {
   background-image: linear-gradient(90deg, var(--yarn-orange) 0 58%, transparent 58%) !important;
-  background-size: 15px 4px;
-  background-repeat: repeat-x;
-  background-position: 0 100%;
+  background-size: 15px 4px !important;
+  background-repeat: repeat-x !important;
+  background-position: 0 100% !important;
   padding-bottom: .16em;
   -webkit-box-decoration-break: clone;
           box-decoration-break: clone;
@@ -292,13 +291,13 @@
 .dzb .section--purl {
   background-color: var(--wool-200) !important;
   background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg") !important;
-  background-size: 30px 30px;
-  border-block: 3px solid color-mix(in srgb, var(--wool-400) 60%, transparent);
+  background-size: 30px 30px !important;
+  border-block: 3px solid color-mix(in srgb, var(--wool-400) 60%, transparent) !important;
 }
 .dzb .section--wool {
   background-color: var(--wool-100) !important;
   background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") !important;
-  background-size: 44px 33px;
+  background-size: 44px 33px !important;
 }
 
 .dzb .stack { display: grid; gap: var(--gap); }
@@ -326,7 +325,7 @@
      и выдвижная панель .nav (position: fixed) начинает позиционироваться
      относительно шапки, а не вьюпорта. */
   background-color: var(--wool-50);
-  border-bottom: 3px solid var(--wool-300);
+  border-bottom: 3px solid var(--wool-300) !important;
 }
 .dzb .header::after {
   /* нижняя кромка-резинка */
@@ -382,8 +381,8 @@
   transition: transform .32s var(--ease);
   background-color: var(--wool-100) !important;
   background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") !important;
-  background-size: 44px 33px;
-  border-left: 4px solid var(--wool-300);
+  background-size: 44px 33px !important;
+  border-left: 4px solid var(--wool-300) !important;
   box-shadow: -24px 0 48px -28px color-mix(in srgb, var(--ink) 60%, transparent) !important;
   padding: calc(var(--header-h) + 1.5rem) 1.5rem 2rem;
   overflow-y: auto;
@@ -404,8 +403,8 @@
 .dzb .nav__link:hover { background: var(--wool-200) !important; color: var(--ink) !important; transform: translateX(3px); }
 .dzb .nav__link[aria-current="page"] {
   background: var(--wool-50) !important;
-  border-color: var(--yarn-orange);
-  border-style: dashed;
+  border-color: var(--yarn-orange) !important;
+  border-style: dashed !important;
   color: var(--accent-deep) !important;
 }
 
@@ -468,7 +467,7 @@
   box-shadow: inset 0 0 0 2.5px var(--thread-strong), var(--shadow-1) !important;
   background: var(--wool-50) !important;
 }
-.dzb .btn--ghost::after { border-color: color-mix(in srgb, var(--ink) 22%, transparent); }
+.dzb .btn--ghost::after { border-color: color-mix(in srgb, var(--ink) 22%, transparent) !important; }
 .dzb .btn--ghost:hover { background: var(--wool-100) !important; }
 .dzb .btn--lg { min-height: 58px; padding: 1rem 2.1rem; font-size: 1.1rem !important; }
 .dzb .btn--block { width: 100%; }
@@ -484,7 +483,7 @@
   font-weight: 600 !important; line-height: 1.35 !important;
   transition: border-color .2s, background-color .2s, transform .2s var(--ease);
 }
-.dzb .doc-link:hover { border-color: var(--yarn-orange); background: var(--wool-100) !important; color: var(--ink) !important; transform: translateY(-2px); }
+.dzb .doc-link:hover { border-color: var(--yarn-orange) !important; background: var(--wool-100) !important; color: var(--ink) !important; transform: translateY(-2px); }
 .dzb .doc-link__icon {
   flex: none; width: 38px; height: 38px;
   display: grid; place-content: center;
@@ -500,14 +499,14 @@
   padding: clamp(1.25rem, 3.5vw, 1.9rem);
   background-color: var(--wool-50) !important;
   background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") !important;
-  background-size: 44px 33px;
+  background-size: 44px 33px !important;
   border: 3px solid var(--wool-200) !important;
   border-radius: var(--r-lg) !important;
   box-shadow: var(--shadow-1) !important;
   transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s;
 }
 .dzb .card--link { text-decoration: none !important; color: inherit !important; }
-.dzb .card--link:hover { color: inherit !important; transform: translateY(-4px) rotate(-.4deg); box-shadow: var(--shadow-lift) !important; border-color: var(--yarn-orange); }
+.dzb .card--link:hover { color: inherit !important; transform: translateY(-4px) rotate(-.4deg); box-shadow: var(--shadow-lift) !important; border-color: var(--yarn-orange) !important; }
 
 .dzb .card__title { margin: 0; font-size: clamp(1.12rem, 1rem + .6vw, 1.4rem) !important; line-height: 1.3 !important; }
 .dzb .card__text { color: var(--ink-soft) !important; margin: 0; }
@@ -552,7 +551,7 @@
   padding: 12px;
   background-color: var(--wool-200) !important;
   background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg") !important;
-  background-size: 30px 30px;
+  background-size: 30px 30px !important;
   border-radius: var(--r-xl) !important;
   box-shadow: var(--shadow-2) !important;
   rotate: -1.2deg;
@@ -596,7 +595,7 @@
   padding: 7px;
   background-color: var(--wool-200) !important;
   background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg") !important;
-  background-size: 26px 26px;
+  background-size: 26px 26px !important;
   box-shadow: var(--shadow-1) !important;
   transition: transform .3s var(--ease), box-shadow .3s var(--ease);
 }
@@ -617,7 +616,7 @@
   transition: border-color .2s, transform .2s var(--ease), background-color .2s;
 }
 .dzb .partner img { max-height: 64px; width: auto; object-fit: contain; mix-blend-mode: multiply; }
-.dzb .partner:hover { border-color: var(--yarn-blue); transform: translateY(-3px); background: #fff !important; }
+.dzb .partner:hover { border-color: var(--yarn-blue) !important; transform: translateY(-3px); background: #fff !important; }
 
 
 .dzb .carousel { position: relative; }
@@ -643,7 +642,7 @@
   box-shadow: var(--shadow-1) !important;
   transition: background-color .2s, border-color .2s, transform .2s;
 }
-.dzb .carousel__btn:hover { border-color: var(--yarn-orange); transform: scale(1.06); }
+.dzb .carousel__btn:hover { border-color: var(--yarn-orange) !important; transform: scale(1.06); }
 .dzb .carousel__btn[disabled] { opacity: .38; cursor: not-allowed; transform: none; }
 .dzb .carousel__dots { display: flex; gap: .45rem; }
 .dzb .carousel__dot {
@@ -718,7 +717,7 @@
   overflow: hidden;
   box-shadow: var(--shadow-1) !important;
 }
-.dzb .acc[open] { border-color: var(--yarn-blue); }
+.dzb .acc[open] { border-color: var(--yarn-blue) !important; }
 .dzb .acc__summary {
   display: flex; align-items: center; gap: .9rem;
   padding: 1.05rem 1.25rem;
@@ -730,7 +729,7 @@
 .dzb .acc__summary::after {
   content: ""; margin-left: auto; flex: none;
   width: 13px; height: 13px;
-  border-right: 3px solid var(--ink-soft); border-bottom: 3px solid var(--ink-soft);
+  border-right: 3px solid var(--ink-soft) !important; border-bottom: 3px solid var(--ink-soft) !important;
   transform: rotate(45deg) translate(-3px, -3px);
   transition: transform .25s var(--ease);
 }
@@ -749,8 +748,8 @@
   font-weight: 700 !important; font-size: .92rem !important;
   transition: background-color .2s, border-color .2s, color .2s;
 }
-.dzb .tag:hover { border-color: var(--yarn-orange); }
-.dzb .tag[aria-pressed="true"] { background: var(--yarn-blue) !important; border-color: var(--yarn-blue); border-style: solid; color: #fff !important; }
+.dzb .tag:hover { border-color: var(--yarn-orange) !important; }
+.dzb .tag[aria-pressed="true"] { background: var(--yarn-blue) !important; border-color: var(--yarn-blue) !important; border-style: solid !important; color: #fff !important; }
 
 .dzb .article-card { padding: 0; overflow: hidden; }
 .dzb .article-card__media { aspect-ratio: 16 / 10; width: 100%; object-fit: cover; }
@@ -794,7 +793,7 @@
   display: grid; gap: .15rem;
   padding: .9rem 1.15rem;
   background: var(--wool-50) !important;
-  border-left: 6px solid var(--patch, var(--yarn-blue));
+  border-left: 6px solid var(--patch, var(--yarn-blue)) !important;
   border-radius: 0 var(--r-md) var(--r-md) 0 !important;
   box-shadow: var(--shadow-1) !important;
 }
@@ -809,7 +808,7 @@
   padding: clamp(1.4rem, 4vw, 2.2rem);
   background-color: var(--wool-100) !important;
   background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg") !important;
-  background-size: 30px 30px;
+  background-size: 30px 30px !important;
   border-radius: var(--r-lg) !important;
   border: 3px solid var(--wool-300) !important;
 }
@@ -848,8 +847,8 @@
 .dzb .footer {
   background-color: var(--wool-200) !important;
   background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg") !important;
-  background-size: 30px 30px;
-  border-top: 4px solid var(--wool-300);
+  background-size: 30px 30px !important;
+  border-top: 4px solid var(--wool-300) !important;
   padding-block: clamp(2.5rem, 7vw, 4rem) 1.5rem;
   margin-top: clamp(2rem, 6vw, 4rem);
 }
@@ -871,12 +870,12 @@
   color: var(--ink) !important;
   transition: transform .2s var(--ease), border-color .2s, background-color .2s;
 }
-.dzb .social:hover { transform: translateY(-3px) rotate(-6deg); border-color: var(--yarn-orange); color: var(--ink) !important; background: #fff !important; }
+.dzb .social:hover { transform: translateY(-3px) rotate(-6deg); border-color: var(--yarn-orange) !important; color: var(--ink) !important; background: #fff !important; }
 
 .dzb .footer__bottom {
   margin-top: clamp(2rem, 5vw, 3rem);
   padding-top: 1.25rem;
-  border-top: 2px dashed var(--thread);
+  border-top: 2px dashed var(--thread) !important;
   display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; align-items: center;
   font-size: .88rem !important; color: var(--ink-mute) !important;
 }
@@ -961,6 +960,31 @@
   overflow: visible;
 }
 .dzb.dzb-chrome--header .header { position: static; }
+
+/* --- лейбл платформы под подвалом ---
+   Конструктор дорисовывает свою подпись «Конструктор сайтов Craftum»
+   после всех блоков. Разметки её в выгрузке нет, поэтому скрипт находит
+   её по ссылке на craftum.com и вешает класс. Убирать подпись нечем —
+   это условие тарифа; приводим к виду сайта, чтобы не выбивалась.
+
+   Цвета заданы литералами: токены шерсти и чернил объявлены на самих
+   блоках, а подпись лежит вне них и ничего не наследует. */
+.dzb-platform {
+  background-color: #F4EADA !important;
+  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg") !important;
+  background-size: 26px 26px !important;
+  border-top: 2px dashed rgba(51, 41, 31, .22) !important;
+  color: #927E67 !important;
+  font-family: "Nunito", "Segoe UI", system-ui, sans-serif !important;
+  font-size: .875rem !important;
+  text-align: center !important;
+  padding: 1rem !important;
+}
+.dzb-platform a {
+  color: #146189 !important;
+  text-underline-offset: .22em;
+}
+.dzb-platform img, .dzb-platform svg { opacity: .75; }
 </style>
 <script>
 /* Поведенческий слой сайта. Запускается один раз на страницу, даже если
@@ -1571,9 +1595,26 @@
        обратную связь — шапка раздувается до нескольких тысяч пикселей. */
   }
 
+  /* Подпись конструктора под подвалом. Её разметка нам неизвестна —
+     в выгрузке сайта её нет, она появляется только на публикации.
+     Ищем по ссылке на craftum.com за пределами наших блоков и помечаем
+     ближайшего прямого потомка body, чтобы оформить его как часть сайта. */
+  function markPlatform() {
+    var links = document.querySelectorAll('a[href*="craftum.com"]');
+    Array.prototype.forEach.call(links, function (a) {
+      if (a.closest(".dzb")) { return; }
+      var box = a;
+      while (box.parentElement && box.parentElement !== document.body) {
+        box = box.parentElement;
+      }
+      box.classList.add("dzb-platform");
+    });
+  }
+
   function watch() {
     sweep();
     markNav();
+    markPlatform();
     offsetHeader();
     window.addEventListener("resize", offsetHeader, { passive: true });
     /* Первый замер случается до того, как применится шрифт и дорисуется
@@ -1587,7 +1628,9 @@
       if (header) { new ResizeObserver(offsetHeader).observe(header); }
     }
     if (!window.MutationObserver) { return; }
-    new MutationObserver(function () { sweep(); markNav(); offsetHeader(); })
+    new MutationObserver(function () {
+      sweep(); markNav(); markPlatform(); offsetHeader();
+    })
       .observe(document.body, { childList: true, subtree: true });
   }
 

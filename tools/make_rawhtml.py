@@ -141,12 +141,20 @@ NESTED_AT = ("@media", "@supports", "@container", "@layer")
 # Список намеренно узкий. Эти свойства в разметке инлайном не задаются
 # (там только align-items, display, gap, margin, max-width, padding),
 # так что инлайновые стили ничего не теряют.
+#
+# Префиксы, а не точный список: сокращённая запись с !important бьёт
+# длинную без него. Из-за этого `border: 2px solid transparent !important`
+# у .nav__link перебивал border-color/border-style у активного пункта,
+# и фирменная оранжевая обводка пропадала.
 PROTECT = (
-    "color", "background", "background-color", "background-image",
-    "font-family", "font-size", "font-weight", "font-style",
-    "line-height", "letter-spacing", "text-transform", "text-decoration",
-    "text-align", "list-style", "border", "border-radius", "box-shadow",
+    "color", "background", "font", "line-height", "letter-spacing",
+    "text-transform", "text-decoration", "text-align", "list-style",
+    "border", "outline", "box-shadow",
 )
+
+
+def is_protected(name):
+    return any(name == p or name.startswith(p + "-") for p in PROTECT)
 
 
 def split_decls(body):
@@ -174,8 +182,8 @@ def protect_decls(body):
     parts = []
     for decl in split_decls(body):
         name = decl.split(":", 1)[0].strip().lower()
-        if (name in PROTECT and "!important" not in decl
-                and ":" in decl):
+        if (":" in decl and is_protected(name)
+                and "!important" not in decl):
             decl = decl.rstrip() + " !important"
         parts.append(decl)
     return ";".join(parts)
@@ -341,7 +349,32 @@ GUARD_BTN = """
   overflow: visible;
 }
 %(s)s.dzb-chrome--header .header { position: static; }
-""" % {"s": SCOPE}
+
+/* --- лейбл платформы под подвалом ---
+   Конструктор дорисовывает свою подпись «Конструктор сайтов Craftum»
+   после всех блоков. Разметки её в выгрузке нет, поэтому скрипт находит
+   её по ссылке на craftum.com и вешает класс. Убирать подпись нечем —
+   это условие тарифа; приводим к виду сайта, чтобы не выбивалась.
+
+   Цвета заданы литералами: токены шерсти и чернил объявлены на самих
+   блоках, а подпись лежит вне них и ничего не наследует. */
+.dzb-platform {
+  background-color: #F4EADA !important;
+  background-image: url("%(seed)s") !important;
+  background-size: 26px 26px !important;
+  border-top: 2px dashed rgba(51, 41, 31, .22) !important;
+  color: #927E67 !important;
+  font-family: "Nunito", "Segoe UI", system-ui, sans-serif !important;
+  font-size: .875rem !important;
+  text-align: center !important;
+  padding: 1rem !important;
+}
+.dzb-platform a {
+  color: #146189 !important;
+  text-underline-offset: .22em;
+}
+.dzb-platform img, .dzb-platform svg { opacity: .75; }
+""" % {"s": SCOPE, "seed": ASSETS + "assets/img/knit-seed.svg"}
 
 
 SITE_HEAD = """<!-- =====================================================================
@@ -447,9 +480,26 @@ SITE_SCRIPT = """</style>
        обратную связь — шапка раздувается до нескольких тысяч пикселей. */
   }
 
+  /* Подпись конструктора под подвалом. Её разметка нам неизвестна —
+     в выгрузке сайта её нет, она появляется только на публикации.
+     Ищем по ссылке на craftum.com за пределами наших блоков и помечаем
+     ближайшего прямого потомка body, чтобы оформить его как часть сайта. */
+  function markPlatform() {
+    var links = document.querySelectorAll('a[href*="craftum.com"]');
+    Array.prototype.forEach.call(links, function (a) {
+      if (a.closest(".dzb")) { return; }
+      var box = a;
+      while (box.parentElement && box.parentElement !== document.body) {
+        box = box.parentElement;
+      }
+      box.classList.add("dzb-platform");
+    });
+  }
+
   function watch() {
     sweep();
     markNav();
+    markPlatform();
     offsetHeader();
     window.addEventListener("resize", offsetHeader, { passive: true });
     /* Первый замер случается до того, как применится шрифт и дорисуется
@@ -463,7 +513,9 @@ SITE_SCRIPT = """</style>
       if (header) { new ResizeObserver(offsetHeader).observe(header); }
     }
     if (!window.MutationObserver) { return; }
-    new MutationObserver(function () { sweep(); markNav(); offsetHeader(); })
+    new MutationObserver(function () {
+      sweep(); markNav(); markPlatform(); offsetHeader();
+    })
       .observe(document.body, { childList: true, subtree: true });
   }
 
@@ -523,6 +575,10 @@ def page_title(html):
 
 def main():
     knit = open(os.path.join(REPO, "assets/css/knit.css"), encoding="utf-8").read()
+    # @charset осмыслен только в начале отдельного файла стилей. Внутри
+    # <style> он бесполезен, а конструктор его к тому же выталкивает
+    # на страницу видимым текстом.
+    knit = re.sub(r"^\s*@charset[^;]+;\s*", "", knit)
     app = open(os.path.join(REPO, "assets/js/app.js"), encoding="utf-8").read()
     # Лента материалов нужна только на news.html и research.html, но сквозной
     # код один на весь сайт. Это безопасно: без контейнера [data-articles]
