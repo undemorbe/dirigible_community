@@ -322,8 +322,19 @@ GUARD_BTN = """
      наследуется уже от него, а .text-center работает как и работал. */
   text-align: left;
   /* сюда же: чужие отступы и выравнивание блока целиком */
-  margin: 0;
   padding: 0;
+
+  /* Блок лежит внутри контейнера конструктора, у которого свои поля по
+     бокам, — полотно не доходило до краёв экрана. Растягиваем блок на
+     всю ширину окна: отрицательный отступ считается от собственной
+     ширины, поэтому приём безвреден и там, где полей нет (тогда
+     50%% - 50vw даёт ноль). Боковые поля самого содержимого никуда
+     не деваются — их держит .container. */
+  width: var(--dzb-vw, 100vw);
+  max-width: var(--dzb-vw, 100vw);
+  /* литеральный процент в %%-строке пишется как %%%% */
+  margin-inline: calc(50%% - var(--dzb-vw, 100vw) / 2);
+  margin-block: 0;
 }
 
 /* Клубки лежат на z-index: -1 — на сайте они уходили за фон <body>,
@@ -519,6 +530,14 @@ SITE_SCRIPT = """</style>
   /* Шапка-блок стоит position: fixed и места в потоке не занимает —
      без компенсации содержимое страницы уехало бы под неё. Высоту
      меряем по факту: она зависит от ширины окна и от шрифта. */
+  /* 100vw считается вместе с полосой прокрутки, и растянутый блок
+     оказался бы шире страницы — появился бы горизонтальный скролл.
+     Поэтому ширину окна отдаём скриптом, уже без полосы. */
+  function measureViewport() {
+    document.documentElement.style.setProperty(
+      "--dzb-vw", document.documentElement.clientWidth + "px");
+  }
+
   function offsetHeader() {
     var header = document.querySelector(".dzb-chrome--header");
     if (!header) { return; }
@@ -550,8 +569,12 @@ SITE_SCRIPT = """</style>
     sweep();
     markNav();
     markPlatform();
+    measureViewport();
     offsetHeader();
-    window.addEventListener("resize", offsetHeader, { passive: true });
+    window.addEventListener("resize", function () {
+      measureViewport();
+      offsetHeader();
+    }, { passive: true });
     /* Первый замер случается до того, как применится шрифт и дорисуется
        рамка шапки, — перемеряем после загрузки. */
     window.addEventListener("load", offsetHeader);
