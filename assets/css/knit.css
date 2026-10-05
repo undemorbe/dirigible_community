@@ -876,6 +876,12 @@ p:last-child { margin-bottom: 0; }
 .cluster--center { justify-content: center; }
 .full-bleed-note { font-size: .85rem; color: var(--ink-mute); }
 
+/* Скан с подписью. Подпись лежит снаружи .knit-frame — внутри она попадала
+   между краем изображения и пунктирной обводкой ::after и читалась как
+   часть скана. */
+.doc-figure { margin: 0; display: grid; gap: .75rem; }
+.doc-figure .full-bleed-note { text-align: center; text-wrap: balance; }
+
 /* ------------------------------------------------------- анимация появления */
 /* Скрываем только при работающем JS (класс .js ставится инлайново в <head>).
    Иначе при отключённом или упавшем JS весь контент остался бы невидимым. */

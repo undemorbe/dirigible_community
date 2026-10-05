@@ -34,6 +34,7 @@ Craftum даёт вставлять свой HTML на двух уровнях, 
     python3 tools/build.py
     python3 tools/make_rawhtml.py
 """
+import json
 import os
 import re
 
@@ -71,6 +72,9 @@ CRAFTUM_PATHS = {
     "program.html": "page12",
     "research.html": "justice_research",
     "effective.html": "effective",
+    # Опросников в выгрузке не было, адреса назвал заказчик
+    "survey-clients.html": "survey-clients",
+    "survey-specialists.html": "survey-specialists",
 }
 
 PAGE_URLS = {name: SITE + path for name, path in CRAFTUM_PATHS.items()}
@@ -141,54 +145,6 @@ NESTED_AT = ("@media", "@supports", "@container", "@layer")
 # Список намеренно узкий. Эти свойства в разметке инлайном не задаются
 # (там только align-items, display, gap, margin, max-width, padding),
 # так что инлайновые стили ничего не теряют.
-#
-# Префиксы, а не точный список: сокращённая запись с !important бьёт
-# длинную без него. Из-за этого `border: 2px solid transparent !important`
-# у .nav__link перебивал border-color/border-style у активного пункта,
-# и фирменная оранжевая обводка пропадала.
-PROTECT = (
-    "color", "background", "font", "line-height", "letter-spacing",
-    "text-transform", "text-decoration", "text-align", "list-style",
-    "border", "outline", "box-shadow",
-)
-
-
-def is_protected(name):
-    return any(name == p or name.startswith(p + "-") for p in PROTECT)
-
-
-def split_decls(body):
-    """Тело правила → объявления. Точка с запятой внутри скобок
-    (например в url(data:...;base64,...)) не разделяет."""
-    out = []
-    depth = 0
-    buf = ""
-    for ch in body:
-        if ch in "([":
-            depth += 1
-        elif ch in ")]":
-            depth -= 1
-        if ch == ";" and depth == 0:
-            out.append(buf)
-            buf = ""
-        else:
-            buf += ch
-    out.append(buf)
-    return out
-
-
-def protect_decls(body):
-    """Помечает уязвимые объявления !important."""
-    parts = []
-    for decl in split_decls(body):
-        name = decl.split(":", 1)[0].strip().lower()
-        if (":" in decl and is_protected(name)
-                and "!important" not in decl):
-            decl = decl.rstrip() + " !important"
-        parts.append(decl)
-    return ";".join(parts)
-
-
 def scope_css(css):
     """Переписывает таблицу стилей так, чтобы она действовала только
     внутри блока."""
@@ -244,7 +200,7 @@ def scope_css(css):
                 # @keyframes, @font-face, @page — селекторов внутри нет
                 out.append(prelude + " {" + body + "}")
         else:
-            out.append(scope_selectors(prelude) + " {" + protect_decls(body) + "}")
+            out.append(scope_selectors(prelude) + " {" + body + "}")
         i = m
     return "".join(out)
 
@@ -292,9 +248,13 @@ def absolutize_html(html):
 
     # Карточки ленты рисует articles.js из articles.json, а пути к картинкам
     # и страницам там относительные. Разрешать их внутри блока не от чего,
-    # поэтому отдаём ленте базу явно.
-    html = re.sub(r"\bdata-articles(?=[\s>])",
-                  'data-articles data-articles-base="%s"' % ASSETS, html, count=1)
+    # поэтому отдаём ленте и базу для файлов, и карту адресов страниц:
+    # лежат они на разных хостах.
+    html = re.sub(
+        r"\bdata-articles(?=[\s>])",
+        'data-articles data-articles-base="%s" data-articles-links=\'%s\''
+        % (ASSETS, json.dumps(PAGE_URLS, ensure_ascii=False)),
+        html, count=1)
     return html
 
 
@@ -322,6 +282,29 @@ GUARD_RESET = """
 # с !important. Заметно это только на кнопках: белая надпись на оранжевой
 # кнопке сливается с фоном.
 GUARD_BTN = """
+/* --- защита цвета от темы конструктора ---
+   Тема Craftum красит ссылки своим акцентом, и правило может стоять
+   с !important. Важность бьёт специфичность, поэтому без ответного
+   !important наши цвета проигрывают при любом селекторе.
+
+   Список намеренно короткий — только места, где цвет задаёт knit.css,
+   а не наследование. Пробовали ставить !important всем свойствам
+   подряд: сокращённая запись начинала бить длинную, и пропадали
+   обводка активного пункта меню (border против border-color)
+   и пунктирный стежок на светлых кнопках (.btn::after против
+   .btn--ghost::after). */
+%(s)s a.btn, %(s)s a.btn:hover, %(s)s a.btn:focus, %(s)s a.btn:visited {
+  color: var(--btn-fg) !important;
+  text-decoration: none !important;
+}
+%(s)s .nav__link, %(s)s .nav__link:visited { color: var(--ink) !important; }
+%(s)s .nav__link[aria-current="page"] { color: var(--accent-deep) !important; }
+%(s)s .brand, %(s)s .brand:visited, %(s)s .brand__name, %(s)s .brand__sub {
+  color: var(--ink) !important;
+}
+%(s)s .footer__list a, %(s)s .footer__list a:visited { color: var(--ink) !important; }
+%(s)s .footer__list a:hover { color: var(--accent-deep) !important; }
+
 /* --- поправки на то, что .dzb это блок, а не <body> --- */
 %(s)s {
   /* у body было min-height: 100svh — на блоке это растянуло бы каждый
@@ -332,6 +315,21 @@ GUARD_BTN = """
      внутри начинает вести себя иначе. clip обрезает так же, но
      скролл-контейнер не создаёт. */
   overflow-x: clip;
+}
+
+/* Клубки лежат на z-index: -1 — на сайте они уходили за фон <body>,
+   который рисуется на канвасе и ничего не перекрывает. У блока фон
+   обычный, и клубки прятались под ним. Возвращаем в поток: в разметке
+   они идут раньше контента, поэтому всё равно остаются под текстом. */
+%(s)s .pompom { z-index: auto; }
+
+/* Подвал отбивается от контента внешним отступом. Внутри страницы это
+   просвет в полотне, а отдельным блоком — белая полоса чужого фона
+   между блоками. Отступ переносим внутрь. */
+%(s)s.dzb-chrome--footer { margin-top: 0; }
+%(s)s.dzb-chrome--footer .footer {
+  margin-top: 0;
+  padding-block-start: clamp(2.5rem, 7vw, 4rem);
 }
 
 /* Шапка.

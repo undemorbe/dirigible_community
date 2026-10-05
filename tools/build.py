@@ -650,8 +650,8 @@ def render_footer() -> str:
         <p class="footer__title">Документы</p>
         <ul class="footer__list">
           <li><a href="education.html">Образовательные услуги и лицензия</a></li>
-          <li><a href="%s" target="_blank" rel="noopener noreferrer">Положение о защите персональных данных</a></li>
-          <li><a href="%s" target="_blank" rel="noopener noreferrer">Политика о персональных данных</a></li>
+          <li><a href="%s" target="_blank" rel="noopener noreferrer">Политика в отношении обработки персональных данных</a></li>
+          <li><a href="%s" target="_blank" rel="noopener noreferrer">Положение об обработке и защите персональных данных</a></li>
           <li><a href="%s" target="_blank" rel="noopener noreferrer">Договор присоединения (оферта)</a></li>
           <li><a href="%s" target="_blank" rel="noopener noreferrer">Проверенная благотворительность</a></li>
         </ul>
@@ -950,6 +950,37 @@ page(
   </div>
 </section>
 
+<section class="section section--purl" aria-labelledby="learn-title">
+  <div class="container">
+    <div class="grid grid--2" style="align-items:center">
+      <div class="prose">
+        <p class="eyebrow">Специалистам</p>
+        <h2 id="learn-title"><span class="stitched-title">Учимся работать с сетью</span></h2>
+        <p>У нас своё образовательное подразделение с лицензией: программы повышения квалификации
+        по технологии «Работа с сетью социальных контактов», супервизии и интервизии для команд
+        из регионов. Учим очно в Москве и онлайн, выезжаем по всей России.</p>
+        <p>Если вы психолог, социальный педагог, сотрудник опеки или НКО — начните с раздела
+        «Обучение»: там программа, расписание, документы и условия поступления.</p>
+        <p class="cluster mt-2">
+          <a class="btn btn--lg" href="education.html">Перейти в «Обучение»</a>
+          <a class="btn btn--ghost btn--lg" href="program.html">Программа курса</a>
+        </p>
+      </div>
+      <div class="stack">
+        <a class="card card--link card--patch reveal" href="education.html" style="--patch:%s">
+          <h3 class="card__title mt-0">Повышение квалификации</h3>
+          <p class="card__text">Лицензированные программы ДПО: документы, расписание и порядок
+          зачисления.</p>
+        </a>
+        <a class="card card--link card--patch reveal" href="effective.html" style="--patch:%s">
+          <h3 class="card__title mt-0">Курс «Инструменты повышения эффективности психотерапии»</h3>
+          <p class="card__text">Михаил Пономарёв, 4–5 июля 2026, 32 академических часа.</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
 %s
 
 %s
@@ -961,6 +992,7 @@ page(
         yarn("pompom--tr"), yarn("pompom--bl"), ICONS["heart"],
         img("hero-figures.jpg", "Разноцветные фигурки людей стоят кругом на столе во время сетевой встречи",
             eager=True, sizes="(min-width: 900px) 45vw, 92vw"),
+        "#1E93CC", "#EE7B18",   # цвета заплаток у карточек обучения
         case_help_section(
             "Адресная помощь", "help-title", "Кому нужна помощь прямо сейчас",
             "Ване 7 лет, у него аутизм. Маме нужна передышка: няня, умеющая работать "
@@ -1689,13 +1721,16 @@ page(
         %s
       </div>
       <div class="gallery">
-        <figure class="knit-frame knit-frame--flat" style="margin:0">
-          %s
-          <figcaption class="full-bleed-note mt-1">Свидетельство о государственной регистрации НКО</figcaption>
+        <!-- Подпись вынесена из .knit-frame: у рамки свой внутренний отступ
+             и пунктирная обводка ::after, и текст внутри неё смотрелся
+             зажатым между краем скана и пунктиром. -->
+        <figure class="doc-figure">
+          <div class="knit-frame knit-frame--flat">%s</div>
+          <figcaption class="full-bleed-note">Свидетельство о государственной регистрации НКО</figcaption>
         </figure>
-        <figure class="knit-frame knit-frame--flat" style="margin:0">
-          %s
-          <figcaption class="full-bleed-note mt-1">Свидетельство о постановке на учёт в налоговом органе</figcaption>
+        <figure class="doc-figure">
+          <div class="knit-frame knit-frame--flat">%s</div>
+          <figcaption class="full-bleed-note">Свидетельство о постановке на учёт в налоговом органе</figcaption>
         </figure>
       </div>
     </div>
@@ -1708,8 +1743,10 @@ page(
         esc(ORG["director"]), ORG["phone_href"], ORG["phone"], ORG["email"], ORG["email"],
         ORG["inn"], ORG["kpp"],
         doc_link(PDF["charter"], "Устав организации"),
-        doc_link(PDF["privacy_policy"], "Положение об обработке и защите персональных данных"),
-        doc_link(PDF["personal_data"], "Политика о персональных данных"),
+        # Подписи сверены по содержимому файлов: d85b9857 — Политика,
+        # b849d6e3 — Положение. Раньше стояли наоборот.
+        doc_link(PDF["privacy_policy"], "Политика в отношении обработки персональных данных"),
+        doc_link(PDF["personal_data"], "Положение об обработке и защите персональных данных"),
         doc_link(PDF["offer"], "Договор присоединения (публичная оферта)"),
         img("doc-registration.jpg", "Скан свидетельства о государственной регистрации некоммерческой организации"),
         img("doc-tax.jpg", "Скан свидетельства о постановке на учёт в налоговом органе"),

@@ -58,6 +58,14 @@
     // На сайте они разрешаются сами, а в сборке для Craftum лента живёт
     // на чужом домене — там база задаётся через data-articles-base.
     this.base = root.dataset.articlesBase || '';
+    // Картинки и страницы там лежат по разным адресам: файлы — в нашем
+    // хранилище, страницы — на самом домене и под своими адресами.
+    // data-articles-links отдаёт карту «имя файла → адрес страницы».
+    try {
+      this.links = JSON.parse(root.dataset.articlesLinks || '{}');
+    } catch (e) {
+      this.links = {};
+    }
     this.perPage = parseInt(root.dataset.articlesPerPage, 10) || 6;
     this.rubric = root.dataset.articlesRubric || '';
     this.listEl = root.querySelector('[data-articles-list]');
@@ -109,8 +117,13 @@
   // Относительный путь из articles.json + база ленты. Абсолютные адреса,
   // якоря, mailto: и tel: остаются как есть.
   Feed.prototype.resolve = function (path) {
-    if (!path || !this.base) return path;
+    if (!path) return path;
     if (/^(https?:|\/\/|data:|#|mailto:|tel:)/i.test(path)) return path;
+    var cut = path.indexOf('#');
+    var file = cut < 0 ? path : path.slice(0, cut);
+    var hash = cut < 0 ? '' : path.slice(cut);
+    if (this.links[file]) return this.links[file] + hash;
+    if (!this.base) return path;
     return this.base + path.replace(/^\//, '');
   };
 
