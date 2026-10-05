@@ -25,6 +25,10 @@
   ul { list-style: square; padding-left: 40px; }
   button { background: crimson; color: #fff; border: 0; padding: 20px; }
   a, a:hover, a:visited { color: #0a84ff !important; }
+  /* Тема конструктора центрирует содержимое своих блоков и добавляет
+     им отступы. Наследуется внутрь нашего блока, если его не осадить. */
+  body { text-align: center; }
+  #slot, #slot-header, #slot-footer { padding: 0 24px; }
 
   .host { max-width: 900px; margin: 0 auto; padding: 24px 20px; }
   .host--note {

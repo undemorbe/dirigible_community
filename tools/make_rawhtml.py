@@ -315,6 +315,15 @@ GUARD_BTN = """
      внутри начинает вести себя иначе. clip обрезает так же, но
      скролл-контейнер не создаёт. */
   overflow-x: clip;
+  /* Конструктор центрирует содержимое своих блоков. Наследование
+     пробивало сброс насквозь (там text-align: inherit), и по центру
+     уезжали тексты карточек, ссылки на документы и опросники.
+     Заземляем выравнивание на самом блоке — дальше внутри всё
+     наследуется уже от него, а .text-center работает как и работал. */
+  text-align: left;
+  /* сюда же: чужие отступы и выравнивание блока целиком */
+  margin: 0;
+  padding: 0;
 }
 
 /* Клубки лежат на z-index: -1 — на сайте они уходили за фон <body>,
@@ -323,14 +332,19 @@ GUARD_BTN = """
    они идут раньше контента, поэтому всё равно остаются под текстом. */
 %(s)s .pompom { z-index: auto; }
 
-/* Подвал отбивается от контента внешним отступом. Внутри страницы это
-   просвет в полотне, а отдельным блоком — белая полоса чужого фона
-   между блоками. Отступ переносим внутрь. */
-%(s)s.dzb-chrome--footer { margin-top: 0; }
-%(s)s.dzb-chrome--footer .footer {
+/* Подвал отбивается от контента внешним отступом — на сайте в этом
+   просвете видно полотно и фестоны последней секции. Отдельным блоком
+   тот же отступ показывал белый фон страницы конструктора. Поэтому
+   отступ делаем внутренним, а блоку даём то же полотно, что и у body:
+   просвет остаётся, но он наш. */
+%(s)s.dzb-chrome--footer {
   margin-top: 0;
-  padding-block-start: clamp(2.5rem, 7vw, 4rem);
+  padding-top: clamp(2rem, 6vw, 4rem);
+  background-color: var(--wool-50);
+  background-image: url("%(stock)s");
+  background-size: 44px 33px;
 }
+%(s)s.dzb-chrome--footer .footer { margin-top: 0; }
 
 /* Шапка.
    position: sticky здесь не годится: липкий элемент держится в пределах
@@ -347,6 +361,34 @@ GUARD_BTN = """
   overflow: visible;
 }
 %(s)s.dzb-chrome--header .header { position: static; }
+
+/* Высота шапки известна заранее (--header-h), поэтому отступ под неё
+   задаём сразу стилями. Скрипт потом уточнит его по факту, но контент
+   уже не прыгает на величину шапки при загрузке. */
+body:has(> %(s)s.dzb-chrome--header) { padding-top: 80px; }
+
+/* Плавное появление.
+   Блоки конструктор вставляет не одновременно: шапка, содержимое и
+   подвал встают по очереди, плюс дорисовка шрифтов. Без этого страница
+   на глазах дёргается. Показываем её одним движением, когда разметка
+   на месте — класс ставит скрипт. */
+.dzb-js %(s)s { opacity: 0; }
+%(s)s.dzb-shown { animation: dzb-fade-in .45s var(--ease) both; }
+@keyframes dzb-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+/* Шапку не сдвигаем: она fixed, трансформация создала бы containing
+   block и выдвижная панель .nav (position: fixed) схлопнулась бы
+   под шапку — грабли, на которые уже наступали в knit.css. */
+%(s)s.dzb-chrome--header.dzb-shown { animation-name: dzb-fade-in-flat; }
+@keyframes dzb-fade-in-flat {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  %(s)s.dzb-shown { animation-duration: .001ms; }
+}
 
 /* --- лейбл платформы под подвалом ---
    Конструктор дорисовывает свою подпись «Конструктор сайтов Craftum»
@@ -372,7 +414,9 @@ GUARD_BTN = """
   text-underline-offset: .22em;
 }
 .dzb-platform img, .dzb-platform svg { opacity: .75; }
-""" % {"s": SCOPE, "seed": ASSETS + "assets/img/knit-seed.svg"}
+""" % {"s": SCOPE,
+       "seed": ASSETS + "assets/img/knit-seed.svg",
+       "stock": ASSETS + "assets/img/knit-stockinette.svg"}
 
 
 SITE_HEAD = """<!-- =====================================================================
@@ -392,6 +436,9 @@ SITE_HEAD = """<!-- ============================================================
      Файл собран скриптом tools/make_rawhtml.py. Руками не править:
      правки идут в knit.css / app.js, затем пересборка.
      ===================================================================== -->
+<!-- Блоки прячутся до плавного появления только при работающем JS:
+     иначе при отключённых скриптах страница осталась бы пустой. -->
+<script>document.documentElement.classList.add("dzb-js")</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&amp;family=Nunito:wght@400;600;700;800&amp;display=swap">
@@ -428,6 +475,11 @@ SITE_SCRIPT = """</style>
     api.initCarousels(root);
     api.initReveal(root);
     api.initVideo(root);
+  }
+
+  function reveal() {
+    Array.prototype.forEach.call(document.querySelectorAll(".dzb"),
+      function (el) { el.classList.add("dzb-shown"); });
   }
 
   function sweep() {
@@ -506,13 +558,19 @@ SITE_SCRIPT = """</style>
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(offsetHeader);
     }
+
+    /* Показываем следующим кадром — к этому моменту отступ под шапку
+       уже выставлен, и появление идёт без скачка. Страховка на случай,
+       если шрифты или наблюдатели почему-то не отработают. */
+    window.requestAnimationFrame(reveal);
+    window.setTimeout(reveal, 1200);
     if (window.ResizeObserver) {
       var header = document.querySelector(".dzb-chrome--header");
       if (header) { new ResizeObserver(offsetHeader).observe(header); }
     }
     if (!window.MutationObserver) { return; }
     new MutationObserver(function () {
-      sweep(); markNav(); markPlatform(); offsetHeader();
+      sweep(); markNav(); markPlatform(); offsetHeader(); reveal();
     })
       .observe(document.body, { childList: true, subtree: true });
   }
