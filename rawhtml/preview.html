@@ -75,8 +75,10 @@
   <button type="button">Кнопка хозяйской страницы</button>
 </div>
 
-<!-- ↓↓↓ сюда подставляется блок из rawhtml/pages/ ↓↓↓ -->
+<!-- ↓↓↓ шапка, блок страницы, подвал — как три блока «HTML-код» ↓↓↓ -->
+<div id="slot-header"></div>
 <div id="slot"></div>
+<div id="slot-footer"></div>
 <!-- ↑↑↑ -->
 
 <div class="host">
@@ -116,18 +118,27 @@ select.addEventListener("change", function () {
   location.search = "?page=" + encodeURIComponent(select.value);
 });
 
-load("site-html.html")
-  .then(function (site) {
-    var head = document.createElement("div");
-    head.innerHTML = site;
-    document.head.append.apply(document.head, Array.prototype.slice.call(head.children));
-    run(document.head);
-    return load("pages/" + page);
+function fill(id, html) {
+  var slot = document.getElementById(id);
+  slot.innerHTML = html;
+  run(slot);
+}
+
+/* Разметка вставляется до сквозного кода — так же, как на опубликованной
+   странице: конструктор отдаёт блоки в теле, а «Пользовательский HTML»
+   выполняется своим чередом. */
+Promise.all([load("header.html"), load("pages/" + page), load("footer.html")])
+  .then(function (parts) {
+    fill("slot-header", parts[0]);
+    fill("slot", parts[1]);
+    fill("slot-footer", parts[2]);
+    return load("site-html.html");
   })
-  .then(function (block) {
-    var slot = document.getElementById("slot");
-    slot.innerHTML = block;
-    run(slot);
+  .then(function (site) {
+    var box = document.createElement("div");
+    box.innerHTML = site;
+    document.head.append.apply(document.head, Array.prototype.slice.call(box.children));
+    run(document.head);
   })
   .catch(function (e) {
     document.getElementById("slot").textContent =

@@ -1,0 +1,44 @@
+<!-- =====================================================================
+     АНО «Дирижабль» — шапка сайта.
+
+     Куда вставлять: блок «HTML-код» («+» → вкладка «Другое» → «HTML-код»),
+     в самом верху страницы. Затем закрепить блок на всех страницах.
+
+     Здесь только разметка. Стили и скрипты — в сквозном коде сайта,
+     см. rawhtml/site-html.html; без него блок будет без оформления.
+
+     Фрагмент намеренно без <!doctype>, <html>, <head> и <body>:
+     Craftum вставляет его внутрь своей страницы.
+
+     Собрано скриптом tools/make_rawhtml.py, руками не править.
+     ===================================================================== -->
+<div class="dzb dzb-chrome dzb-chrome--header">
+<header class="header">
+  <div class="container header__inner">
+    <a class="brand" href="https://dirigible.community/">
+      <img class="brand__mark" src="https://undemorbe.github.io/dirigible_community/assets/img/media/logo.png" alt="" width="1200" height="1200" fetchpriority="high" decoding="async">
+      <span class="brand__text">
+        <span class="brand__name">Дирижабль</span>
+        <span class="brand__sub">Центр развития социальных практик</span>
+      </span>
+    </a>
+
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false"
+            aria-controls="site-nav" aria-label="Открыть меню">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="nav" id="site-nav" aria-label="Основная навигация">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="https://dirigible.community/">Главная</a></li>
+        <li><a class="nav__link" href="https://dirigible.community/page3">О нас</a></li>
+        <li><a class="nav__link" href="https://dirigible.community/page4">Новости</a></li>
+        <li><a class="nav__link" href="https://dirigible.community/justice_research">Исследование</a></li>
+        <li><a class="nav__link" href="https://dirigible.community/page10">Отчёты</a></li>
+        <li><a class="nav__link" href="https://dirigible.community/page7">Документы</a></li>
+        <li class="nav__cta"><a class="btn btn--orange" href="https://dirigible.community/page9"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.7-9.4-9A5.3 5.3 0 0 1 12 6.6 5.3 5.3 0 0 1 21.4 12c-1.9 4.3-9.4 9-9.4 9z"/></svg> Помочь</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+</div>

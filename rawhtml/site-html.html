@@ -104,14 +104,14 @@
 .dzb {
   margin: 0;
   min-height: 100svh;
-  background-color: var(--wool-50);
-  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg");
+  background-color: var(--wool-50) !important;
+  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") !important;
   background-size: 44px 33px;
-  color: var(--ink);
-  font-family: "Nunito", "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
-  font-size: clamp(1rem, .96rem + .25vw, 1.125rem);
-  line-height: 1.65;
-  font-weight: 400;
+  color: var(--ink) !important;
+  font-family: "Nunito", "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif !important;
+  font-size: clamp(1rem, .96rem + .25vw, 1.125rem) !important;
+  line-height: 1.65 !important;
+  font-weight: 400 !important;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -119,30 +119,30 @@
 .dzb.is-locked { overflow: hidden; }
 
 .dzb img, .dzb svg, .dzb video { display: block; max-width: 100%; height: auto; }
-.dzb img { background-color: var(--wool-100); }
+.dzb img { background-color: var(--wool-100) !important; }
 
-.dzb button, .dzb input, .dzb select, .dzb textarea { font: inherit; color: inherit; }
+.dzb button, .dzb input, .dzb select, .dzb textarea { font: inherit; color: inherit !important; }
 .dzb button { cursor: pointer; }
 
-.dzb a { color: var(--accent-deep); text-decoration-thickness: 1.5px; text-underline-offset: .22em; }
-.dzb a:hover { color: var(--yarn-orange-deep); }
+.dzb a { color: var(--accent-deep) !important; text-decoration-thickness: 1.5px; text-underline-offset: .22em; }
+.dzb a:hover { color: var(--yarn-orange-deep) !important; }
 
 
 .dzb :focus-visible {
   outline: 3px dashed var(--yarn-orange);
   outline-offset: 3px;
-  border-radius: var(--r-sm);
+  border-radius: var(--r-sm) !important;
 }
 
-.dzb ::selection { background: color-mix(in srgb, var(--yarn-mustard) 45%, transparent); }
+.dzb ::selection { background: color-mix(in srgb, var(--yarn-mustard) 45%, transparent) !important; }
 
 .dzb .skip-link {
   position: absolute; left: 50%; top: -100px; transform: translateX(-50%);
   z-index: 200; padding: .75rem 1.25rem;
-  background: var(--ink); color: var(--wool-50);
-  border-radius: 0 0 var(--r-md) var(--r-md); font-weight: 700;
+  background: var(--ink) !important; color: var(--wool-50) !important;
+  border-radius: 0 0 var(--r-md) var(--r-md) !important; font-weight: 700 !important;
 }
-.dzb .skip-link:focus { top: 0; color: var(--wool-50); }
+.dzb .skip-link:focus { top: 0; color: var(--wool-50) !important; }
 
 .dzb .visually-hidden {
   position: absolute !important; width: 1px; height: 1px;
@@ -152,9 +152,9 @@
 
 
 
-.dzb .knit-stockinette { background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg"); background-size: 44px 33px; }
+.dzb .knit-stockinette { background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") !important; background-size: 44px 33px; }
 
-.dzb .knit-seed { background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg"); background-size: 30px 30px; }
+.dzb .knit-seed { background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg") !important; background-size: 30px 30px; }
 
 .dzb .knit-rib {
   background-image:
@@ -162,25 +162,25 @@
       color-mix(in srgb, var(--ink) 9%, transparent) 0 2px,
       transparent 2px 7px,
       color-mix(in srgb, #fff 60%, transparent) 7px 9px,
-      transparent 9px 14px);
+      transparent 9px 14px) !important;
 }
 
 
 .dzb .swatch {
   position: relative;
-  background-color: var(--wool-100);
-  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg");
+  background-color: var(--wool-100) !important;
+  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") !important;
   background-size: 44px 33px;
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-1);
+  border-radius: var(--r-lg) !important;
+  box-shadow: var(--shadow-1) !important;
   overflow: hidden;
 }
 
 .dzb .swatch::after {
   content: "";
   position: absolute; inset: 8px;
-  border: 2px dashed color-mix(in srgb, var(--ink) 20%, transparent);
-  border-radius: calc(var(--r-lg) - 8px);
+  border: 2px dashed color-mix(in srgb, var(--ink) 20%, transparent) !important;
+  border-radius: calc(var(--r-lg) - 8px) !important;
   pointer-events: none;
 }
 .dzb .swatch--plain::after { display: none; }
@@ -188,8 +188,8 @@
 
 .dzb .cable-divider {
   height: 26px;
-  color: var(--yarn-mustard);
-  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-cable.svg");
+  color: var(--yarn-mustard) !important;
+  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-cable.svg") !important;
   background-repeat: repeat-x;
   background-size: auto 26px;
   opacity: .55;
@@ -201,7 +201,7 @@
 .dzb .scallop-bottom::after {
   content: "";
   position: absolute; left: 0; right: 0; bottom: -13px; height: 14px;
-  background: inherit;
+  background: inherit !important;
   -webkit-mask-image: radial-gradient(circle at 13px 0, #000 12px, transparent 12.5px);
           mask-image: radial-gradient(circle at 13px 0, #000 12px, transparent 12.5px);
   -webkit-mask-size: 26px 14px; mask-size: 26px 14px;
@@ -211,45 +211,45 @@
 
 
 .dzb h1, .dzb h2, .dzb h3, .dzb h4 {
-  font-family: "Comfortaa", "Nunito", system-ui, sans-serif;
-  font-weight: 700;
-  line-height: 1.24;
-  letter-spacing: -.015em;
+  font-family: "Comfortaa", "Nunito", system-ui, sans-serif !important;
+  font-weight: 700 !important;
+  line-height: 1.24 !important;
+  letter-spacing: -.015em !important;
   margin: 0 0 .6em;
   text-wrap: balance;
 }
-.dzb h1 { font-size: clamp(1.8rem, 1.3rem + 2.3vw, 2.9rem); }
-.dzb h2 { font-size: clamp(1.45rem, 1.1rem + 1.7vw, 2.25rem); }
-.dzb h3 { font-size: clamp(1.2rem, 1rem + 1.1vw, 1.6rem); }
-.dzb h4 { font-size: clamp(1.05rem, .98rem + .5vw, 1.25rem); }
+.dzb h1 { font-size: clamp(1.8rem, 1.3rem + 2.3vw, 2.9rem) !important; }
+.dzb h2 { font-size: clamp(1.45rem, 1.1rem + 1.7vw, 2.25rem) !important; }
+.dzb h3 { font-size: clamp(1.2rem, 1rem + 1.1vw, 1.6rem) !important; }
+.dzb h4 { font-size: clamp(1.05rem, .98rem + .5vw, 1.25rem) !important; }
 
 .dzb p { margin: 0 0 1.1em; text-wrap: pretty; }
 .dzb p:last-child { margin-bottom: 0; }
 
 .dzb .lead {
-  font-size: clamp(1.08rem, 1rem + .55vw, 1.35rem);
-  color: var(--ink-soft);
-  line-height: 1.6;
+  font-size: clamp(1.08rem, 1rem + .55vw, 1.35rem) !important;
+  color: var(--ink-soft) !important;
+  line-height: 1.6 !important;
 }
 
 .dzb .eyebrow {
   display: inline-flex; align-items: center; gap: .5rem;
-  font-family: "Comfortaa", sans-serif;
-  font-size: .78rem; font-weight: 700;
-  letter-spacing: .16em; text-transform: uppercase;
-  color: var(--accent-deep);
+  font-family: "Comfortaa", sans-serif !important;
+  font-size: .78rem !important; font-weight: 700 !important;
+  letter-spacing: .16em !important; text-transform: uppercase !important;
+  color: var(--accent-deep) !important;
   margin-bottom: .9rem;
 }
 
 .dzb .eyebrow::before {
-  content: ""; width: 28px; height: 4px; flex: none; border-radius: var(--r-pill);
-  background-image: linear-gradient(90deg, var(--yarn-orange) 0 58%, transparent 58%);
+  content: ""; width: 28px; height: 4px; flex: none; border-radius: var(--r-pill) !important;
+  background-image: linear-gradient(90deg, var(--yarn-orange) 0 58%, transparent 58%) !important;
   background-size: 9px 4px;
 }
 
 
 .dzb .stitched-title {
-  background-image: linear-gradient(90deg, var(--yarn-orange) 0 58%, transparent 58%);
+  background-image: linear-gradient(90deg, var(--yarn-orange) 0 58%, transparent 58%) !important;
   background-size: 15px 4px;
   background-repeat: repeat-x;
   background-position: 0 100%;
@@ -260,16 +260,16 @@
 
 .dzb .prose > * + * { margin-top: 1.1em; }
 .dzb .prose { max-width: var(--maxw-text); }
-.dzb .prose strong { color: var(--ink); }
+.dzb .prose strong { color: var(--ink) !important; }
 
 
-.dzb .knit-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .85rem; }
+.dzb .knit-list { list-style: none !important; margin: 0; padding: 0; display: grid; gap: .85rem; }
 .dzb .knit-list > li { position: relative; padding-left: 2.1rem; }
 .dzb .knit-list > li::before {
   content: "";
   position: absolute; left: 0; top: .5em;
   width: 1.15rem; height: .9rem;
-  background: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") no-repeat 0 0 / 1.4rem 1.05rem;
+  background: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") no-repeat 0 0 / 1.4rem 1.05rem !important;
   filter: sepia(1) saturate(4) hue-rotate(-15deg);
   opacity: .9;
 }
@@ -290,14 +290,14 @@
 
 
 .dzb .section--purl {
-  background-color: var(--wool-200);
-  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg");
+  background-color: var(--wool-200) !important;
+  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg") !important;
   background-size: 30px 30px;
   border-block: 3px solid color-mix(in srgb, var(--wool-400) 60%, transparent);
 }
 .dzb .section--wool {
-  background-color: var(--wool-100);
-  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg");
+  background-color: var(--wool-100) !important;
+  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") !important;
   background-size: 44px 33px;
 }
 
@@ -317,7 +317,7 @@
 }
 
 .dzb .section-head { max-width: var(--maxw-text); margin-bottom: clamp(1.5rem, 4vw, 2.5rem); }
-.dzb .section-head--center { margin-inline: auto; text-align: center; }
+.dzb .section-head--center { margin-inline: auto; text-align: center !important; }
 
 
 .dzb .header {
@@ -333,7 +333,7 @@
   content: ""; display: block; height: 6px;
   background-image:
     repeating-linear-gradient(90deg,
-      var(--yarn-blue) 0 14px, var(--yarn-orange) 14px 28px);
+      var(--yarn-blue) 0 14px, var(--yarn-orange) 14px 28px) !important;
   opacity: .55;
 }
 
@@ -343,19 +343,19 @@
   padding-block: .6rem;
 }
 
-.dzb .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; color: var(--ink); margin-right: auto; }
-.dzb .brand:hover { color: var(--ink); }
+.dzb .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none !important; color: var(--ink) !important; margin-right: auto; }
+.dzb .brand:hover { color: var(--ink) !important; }
 .dzb .brand__mark {
   width: 44px; height: 44px; flex: none;
-  border-radius: var(--r-pill);
-  background: var(--wool-100);
-  border: 2px solid var(--wool-300);
+  border-radius: var(--r-pill) !important;
+  background: var(--wool-100) !important;
+  border: 2px solid var(--wool-300) !important;
   padding: 3px;
   object-fit: contain;
 }
-.dzb .brand__text { display: grid; line-height: 1.12; }
-.dzb .brand__name { font-family: "Comfortaa", sans-serif; font-weight: 700; font-size: 1.05rem; }
-.dzb .brand__sub { font-size: .68rem; color: var(--ink-mute); letter-spacing: .04em; }
+.dzb .brand__text { display: grid; line-height: 1.12 !important; }
+.dzb .brand__name { font-family: "Comfortaa", sans-serif !important; font-weight: 700 !important; font-size: 1.05rem !important; }
+.dzb .brand__sub { font-size: .68rem !important; color: var(--ink-mute) !important; letter-spacing: .04em !important; }
 
 
 .dzb .nav-toggle {
@@ -364,12 +364,12 @@
   width: 46px; height: 46px; flex: none;
   /* выше выдвижной панели (.nav, z-index: 99), иначе кнопка «закрыть» под ней */
   position: relative; z-index: 101;
-  border: 2px solid var(--wool-300);
-  border-radius: var(--r-md);
-  background: var(--wool-100);
-  box-shadow: var(--shadow-1);
+  border: 2px solid var(--wool-300) !important;
+  border-radius: var(--r-md) !important;
+  background: var(--wool-100) !important;
+  box-shadow: var(--shadow-1) !important;
 }
-.dzb .nav-toggle span { display: block; width: 22px; height: 3px; border-radius: 3px; background: var(--bar); transition: transform .28s var(--ease), opacity .2s; }
+.dzb .nav-toggle span { display: block; width: 22px; height: 3px; border-radius: 3px !important; background: var(--bar) !important; transition: transform .28s var(--ease), opacity .2s; }
 .dzb .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
 .dzb .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
 .dzb .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
@@ -380,40 +380,40 @@
   width: min(88vw, 340px);
   transform: translateX(101%);
   transition: transform .32s var(--ease);
-  background-color: var(--wool-100);
-  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg");
+  background-color: var(--wool-100) !important;
+  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") !important;
   background-size: 44px 33px;
   border-left: 4px solid var(--wool-300);
-  box-shadow: -24px 0 48px -28px color-mix(in srgb, var(--ink) 60%, transparent);
+  box-shadow: -24px 0 48px -28px color-mix(in srgb, var(--ink) 60%, transparent) !important;
   padding: calc(var(--header-h) + 1.5rem) 1.5rem 2rem;
   overflow-y: auto;
   z-index: 99;
 }
 .dzb .nav.is-open { transform: translateX(0); }
 
-.dzb .nav__list { list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem; }
+.dzb .nav__list { list-style: none !important; margin: 0; padding: 0; display: grid; gap: .35rem; }
 .dzb .nav__link {
   display: flex; align-items: center; gap: .6rem;
   white-space: nowrap;
   padding: .8rem 1rem;
-  border-radius: var(--r-md);
-  font-weight: 700; text-decoration: none; color: var(--ink);
-  border: 2px solid transparent;
+  border-radius: var(--r-md) !important;
+  font-weight: 700 !important; text-decoration: none !important; color: var(--ink) !important;
+  border: 2px solid transparent !important;
   transition: background-color .2s, border-color .2s, transform .2s var(--ease);
 }
-.dzb .nav__link:hover { background: var(--wool-200); color: var(--ink); transform: translateX(3px); }
+.dzb .nav__link:hover { background: var(--wool-200) !important; color: var(--ink) !important; transform: translateX(3px); }
 .dzb .nav__link[aria-current="page"] {
-  background: var(--wool-50);
+  background: var(--wool-50) !important;
   border-color: var(--yarn-orange);
   border-style: dashed;
-  color: var(--accent-deep);
+  color: var(--accent-deep) !important;
 }
 
 .dzb .nav__cta { margin-top: 1.25rem; }
 
 .dzb .nav-backdrop {
   position: fixed; inset: 0; z-index: 98;
-  background: color-mix(in srgb, var(--ink) 45%, transparent);
+  background: color-mix(in srgb, var(--ink) 45%, transparent) !important;
   opacity: 0; visibility: hidden;
   transition: opacity .3s, visibility .3s;
 }
@@ -425,10 +425,10 @@
   .dzb .nav-backdrop { display: none; }
   .dzb .nav {
     position: static; width: auto; transform: none;
-    background: none; border: 0; box-shadow: none; padding: 0; overflow: visible;
+    background: none !important; border: 0 !important; box-shadow: none !important; padding: 0; overflow: visible;
   }
   .dzb .nav__list { grid-auto-flow: column; gap: .15rem; align-items: center; }
-  .dzb .nav__link { padding: .55rem .8rem; font-size: .95rem; }
+  .dzb .nav__link { padding: .55rem .8rem; font-size: .95rem !important; }
   .dzb .nav__link:hover { transform: none; }
   .dzb .nav__cta { margin: 0 0 0 .6rem; }
 }
@@ -440,24 +440,24 @@
   display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
   min-height: 48px;
   padding: .8rem 1.5rem;
-  border: 0; border-radius: var(--r-pill);
-  background: var(--btn-bg); color: var(--btn-fg);
-  font-family: "Comfortaa", sans-serif; font-weight: 700; font-size: 1rem;
-  text-align: center; text-decoration: none;
+  border: 0 !important; border-radius: var(--r-pill) !important;
+  background: var(--btn-bg) !important; color: var(--btn-fg) !important;
+  font-family: "Comfortaa", sans-serif !important; font-weight: 700 !important; font-size: 1rem !important;
+  text-align: center !important; text-decoration: none !important;
   box-shadow:
     inset 0 0 0 2px color-mix(in srgb, #fff 55%, transparent),
-    var(--shadow-1);
+    var(--shadow-1) !important;
   position: relative;
   transition: transform .18s var(--ease), box-shadow .18s var(--ease), background-color .18s;
 }
 
 .dzb .btn::after {
   content: ""; position: absolute; inset: 5px;
-  border: 2px dashed color-mix(in srgb, #fff 65%, transparent);
-  border-radius: var(--r-pill);
+  border: 2px dashed color-mix(in srgb, #fff 65%, transparent) !important;
+  border-radius: var(--r-pill) !important;
   pointer-events: none;
 }
-.dzb .btn:hover { color: var(--btn-fg); transform: translateY(-2px); box-shadow: inset 0 0 0 2px color-mix(in srgb,#fff 55%,transparent), var(--shadow-2); }
+.dzb .btn:hover { color: var(--btn-fg) !important; transform: translateY(-2px); box-shadow: inset 0 0 0 2px color-mix(in srgb,#fff 55%,transparent), var(--shadow-2) !important; }
 .dzb .btn:active { transform: translateY(1px); }
 
 .dzb .btn--orange { --btn-bg: var(--yarn-orange); }
@@ -465,59 +465,59 @@
 .dzb .btn--sage { --btn-bg: var(--yarn-sage); }
 .dzb .btn--ghost {
   --btn-bg: transparent; --btn-fg: var(--ink);
-  box-shadow: inset 0 0 0 2.5px var(--thread-strong), var(--shadow-1);
-  background: var(--wool-50);
+  box-shadow: inset 0 0 0 2.5px var(--thread-strong), var(--shadow-1) !important;
+  background: var(--wool-50) !important;
 }
 .dzb .btn--ghost::after { border-color: color-mix(in srgb, var(--ink) 22%, transparent); }
-.dzb .btn--ghost:hover { background: var(--wool-100); }
-.dzb .btn--lg { min-height: 58px; padding: 1rem 2.1rem; font-size: 1.1rem; }
+.dzb .btn--ghost:hover { background: var(--wool-100) !important; }
+.dzb .btn--lg { min-height: 58px; padding: 1rem 2.1rem; font-size: 1.1rem !important; }
 .dzb .btn--block { width: 100%; }
 
 
 .dzb .doc-link {
   display: flex; align-items: center; gap: .85rem;
   padding: .95rem 1.15rem;
-  background: var(--wool-50);
-  border: 2px dashed var(--thread);
-  border-radius: var(--r-md);
-  text-decoration: none; color: var(--ink);
-  font-weight: 600; line-height: 1.35;
+  background: var(--wool-50) !important;
+  border: 2px dashed var(--thread) !important;
+  border-radius: var(--r-md) !important;
+  text-decoration: none !important; color: var(--ink) !important;
+  font-weight: 600 !important; line-height: 1.35 !important;
   transition: border-color .2s, background-color .2s, transform .2s var(--ease);
 }
-.dzb .doc-link:hover { border-color: var(--yarn-orange); background: var(--wool-100); color: var(--ink); transform: translateY(-2px); }
+.dzb .doc-link:hover { border-color: var(--yarn-orange); background: var(--wool-100) !important; color: var(--ink) !important; transform: translateY(-2px); }
 .dzb .doc-link__icon {
   flex: none; width: 38px; height: 38px;
   display: grid; place-content: center;
-  border-radius: var(--r-pill);
-  background: color-mix(in srgb, var(--yarn-mustard) 30%, var(--wool-100));
-  color: var(--ink);
+  border-radius: var(--r-pill) !important;
+  background: color-mix(in srgb, var(--yarn-mustard) 30%, var(--wool-100)) !important;
+  color: var(--ink) !important;
 }
-.dzb .doc-link__meta { display: block; font-size: .78rem; font-weight: 700; color: var(--ink-mute); letter-spacing: .06em; text-transform: uppercase; }
+.dzb .doc-link__meta { display: block; font-size: .78rem !important; font-weight: 700 !important; color: var(--ink-mute) !important; letter-spacing: .06em !important; text-transform: uppercase !important; }
 
 
 .dzb .card {
   display: flex; flex-direction: column; gap: .85rem;
   padding: clamp(1.25rem, 3.5vw, 1.9rem);
-  background-color: var(--wool-50);
-  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg");
+  background-color: var(--wool-50) !important;
+  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-stockinette.svg") !important;
   background-size: 44px 33px;
-  border: 3px solid var(--wool-200);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-1);
+  border: 3px solid var(--wool-200) !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: var(--shadow-1) !important;
   transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s;
 }
-.dzb .card--link { text-decoration: none; color: inherit; }
-.dzb .card--link:hover { color: inherit; transform: translateY(-4px) rotate(-.4deg); box-shadow: var(--shadow-lift); border-color: var(--yarn-orange); }
+.dzb .card--link { text-decoration: none !important; color: inherit !important; }
+.dzb .card--link:hover { color: inherit !important; transform: translateY(-4px) rotate(-.4deg); box-shadow: var(--shadow-lift) !important; border-color: var(--yarn-orange); }
 
-.dzb .card__title { margin: 0; font-size: clamp(1.12rem, 1rem + .6vw, 1.4rem); line-height: 1.3; }
-.dzb .card__text { color: var(--ink-soft); margin: 0; }
+.dzb .card__title { margin: 0; font-size: clamp(1.12rem, 1rem + .6vw, 1.4rem) !important; line-height: 1.3 !important; }
+.dzb .card__text { color: var(--ink-soft) !important; margin: 0; }
 
 
 .dzb .card--patch { position: relative; padding-top: calc(clamp(1.25rem,3.5vw,1.9rem) + 8px); }
 .dzb .card--patch::before {
   content: ""; position: absolute; inset: 0 0 auto; height: 8px;
-  background-image: repeating-linear-gradient(90deg, var(--patch, var(--yarn-blue)) 0 10px, transparent 10px 16px);
-  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  background-image: repeating-linear-gradient(90deg, var(--patch, var(--yarn-blue)) 0 10px, transparent 10px 16px) !important;
+  border-radius: var(--r-lg) var(--r-lg) 0 0 !important;
 }
 .dzb .card--patch:nth-child(3n+2) { --patch: var(--yarn-orange); }
 .dzb .card--patch:nth-child(3n+3) { --patch: var(--yarn-sage); }
@@ -525,11 +525,11 @@
 .dzb .card__num {
   width: 46px; height: 46px; flex: none;
   display: grid; place-content: center;
-  border-radius: var(--r-pill);
-  background: color-mix(in srgb, var(--patch, var(--yarn-blue)) 18%, var(--wool-50));
-  border: 2px dashed color-mix(in srgb, var(--patch, var(--yarn-blue)) 55%, transparent);
-  font-family: "Comfortaa", sans-serif; font-weight: 700; font-size: 1.15rem;
-  color: var(--ink);
+  border-radius: var(--r-pill) !important;
+  background: color-mix(in srgb, var(--patch, var(--yarn-blue)) 18%, var(--wool-50)) !important;
+  border: 2px dashed color-mix(in srgb, var(--patch, var(--yarn-blue)) 55%, transparent) !important;
+  font-family: "Comfortaa", sans-serif !important; font-weight: 700 !important; font-size: 1.15rem !important;
+  color: var(--ink) !important;
 }
 
 
@@ -538,30 +538,30 @@
   content: ""; position: absolute; inset: 0; z-index: -1;
   background:
     radial-gradient(75% 60% at 8% -10%, color-mix(in srgb, var(--yarn-blue) 10%, transparent) 0%, transparent 62%),
-    radial-gradient(70% 65% at 98% 18%, color-mix(in srgb, var(--yarn-orange) 15%, transparent) 0%, transparent 58%);
+    radial-gradient(70% 65% at 98% 18%, color-mix(in srgb, var(--yarn-orange) 15%, transparent) 0%, transparent 58%) !important;
 }
 .dzb .hero__grid { display: grid; gap: clamp(1.75rem, 5vw, 3rem); align-items: center; }
 @media (min-width: 900px) { .dzb .hero__grid { grid-template-columns: 1.05fr .95fr; } }
 
-.dzb .hero__title { font-size: clamp(2.05rem, 1.35rem + 3.2vw, 3.4rem); margin-bottom: .5em; }
+.dzb .hero__title { font-size: clamp(2.05rem, 1.35rem + 3.2vw, 3.4rem) !important; margin-bottom: .5em; }
 .dzb .hero__actions { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: 1.75rem; }
 
 
 .dzb .knit-frame {
   position: relative;
   padding: 12px;
-  background-color: var(--wool-200);
-  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg");
+  background-color: var(--wool-200) !important;
+  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg") !important;
   background-size: 30px 30px;
-  border-radius: var(--r-xl);
-  box-shadow: var(--shadow-2);
+  border-radius: var(--r-xl) !important;
+  box-shadow: var(--shadow-2) !important;
   rotate: -1.2deg;
 }
-.dzb .knit-frame > img { border-radius: calc(var(--r-xl) - 12px); width: 100%; object-fit: cover; }
+.dzb .knit-frame > img { border-radius: calc(var(--r-xl) - 12px) !important; width: 100%; object-fit: cover; }
 .dzb .knit-frame::after {
   content: ""; position: absolute; inset: 6px;
-  border: 2px dashed color-mix(in srgb, var(--ink) 25%, transparent);
-  border-radius: calc(var(--r-xl) - 6px);
+  border: 2px dashed color-mix(in srgb, var(--ink) 25%, transparent) !important;
+  border-radius: calc(var(--r-xl) - 6px) !important;
   pointer-events: none;
 }
 .dzb .knit-frame--flat { rotate: none; }
@@ -569,55 +569,55 @@
 
 .dzb .pompom {
   position: absolute; width: 96px; height: 96px; z-index: -1;
-  color: var(--yarn-mustard); opacity: .45; pointer-events: none;
+  color: var(--yarn-mustard) !important; opacity: .45; pointer-events: none;
 }
-.dzb .pompom--tr { top: 3%; right: -14px; color: var(--yarn-berry); opacity: .35; }
-.dzb .pompom--bl { bottom: 5%; left: -30px; color: var(--yarn-sage); }
+.dzb .pompom--tr { top: 3%; right: -14px; color: var(--yarn-berry) !important; opacity: .35; }
+.dzb .pompom--bl { bottom: 5%; left: -30px; color: var(--yarn-sage) !important; }
 @media (max-width: 720px) { .dzb .pompom { display: none; } }
 
 
 .dzb .facts { display: grid; gap: var(--gap); grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); }
-.dzb .fact { text-align: center; padding: 1.5rem 1.1rem; }
+.dzb .fact { text-align: center !important; padding: 1.5rem 1.1rem; }
 .dzb .fact__num {
   display: block;
-  font-family: "Comfortaa", sans-serif; font-weight: 700;
-  font-size: clamp(2rem, 1.3rem + 3vw, 3rem);
-  line-height: 1; color: var(--accent-deep);
+  font-family: "Comfortaa", sans-serif !important; font-weight: 700 !important;
+  font-size: clamp(2rem, 1.3rem + 3vw, 3rem) !important;
+  line-height: 1 !important; color: var(--accent-deep) !important;
 }
-.dzb .fact__label { display: block; margin-top: .5rem; color: var(--ink-soft); font-size: .95rem; }
+.dzb .fact__label { display: block; margin-top: .5rem; color: var(--ink-soft) !important; font-size: .95rem !important; }
 
 
 .dzb .team-grid { display: grid; gap: var(--gap); grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
-.dzb .person { text-align: center; display: grid; gap: .6rem; justify-items: center; }
+.dzb .person { text-align: center !important; display: grid; gap: .6rem; justify-items: center; }
 .dzb .person__photo {
   width: clamp(120px, 40vw, 168px); aspect-ratio: 1;
-  border-radius: var(--r-pill);
+  border-radius: var(--r-pill) !important;
   object-fit: cover;
   padding: 7px;
-  background-color: var(--wool-200);
-  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg");
+  background-color: var(--wool-200) !important;
+  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg") !important;
   background-size: 26px 26px;
-  box-shadow: var(--shadow-1);
+  box-shadow: var(--shadow-1) !important;
   transition: transform .3s var(--ease), box-shadow .3s var(--ease);
 }
-.dzb .person:hover .person__photo { transform: translateY(-4px) rotate(2deg); box-shadow: var(--shadow-2); }
+.dzb .person:hover .person__photo { transform: translateY(-4px) rotate(2deg); box-shadow: var(--shadow-2) !important; }
 
 .dzb .person figcaption { display: grid; gap: .3rem; }
-.dzb .person__name { font-family: "Comfortaa", sans-serif; font-weight: 700; font-size: 1.08rem; }
-.dzb .person__role { font-size: .92rem; color: var(--ink-soft); line-height: 1.45; }
+.dzb .person__name { font-family: "Comfortaa", sans-serif !important; font-weight: 700 !important; font-size: 1.08rem !important; }
+.dzb .person__role { font-size: .92rem !important; color: var(--ink-soft) !important; line-height: 1.45 !important; }
 
 
 .dzb .partners { display: grid; gap: var(--gap); grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); align-items: center; }
 .dzb .partner {
   display: grid; place-content: center;
   padding: 1.1rem; min-height: 108px;
-  background: var(--wool-50);
-  border: 2px dashed var(--thread);
-  border-radius: var(--r-md);
+  background: var(--wool-50) !important;
+  border: 2px dashed var(--thread) !important;
+  border-radius: var(--r-md) !important;
   transition: border-color .2s, transform .2s var(--ease), background-color .2s;
 }
 .dzb .partner img { max-height: 64px; width: auto; object-fit: contain; mix-blend-mode: multiply; }
-.dzb .partner:hover { border-color: var(--yarn-blue); transform: translateY(-3px); background: #fff; }
+.dzb .partner:hover { border-color: var(--yarn-blue); transform: translateY(-3px); background: #fff !important; }
 
 
 .dzb .carousel { position: relative; }
@@ -637,20 +637,20 @@
 .dzb .carousel__nav { display: flex; gap: .6rem; justify-content: center; align-items: center; margin-top: .5rem; }
 .dzb .carousel__btn {
   width: 46px; height: 46px; display: grid; place-content: center;
-  border-radius: var(--r-pill);
-  background: var(--wool-50);
-  border: 2.5px solid var(--wool-300);
-  box-shadow: var(--shadow-1);
+  border-radius: var(--r-pill) !important;
+  background: var(--wool-50) !important;
+  border: 2.5px solid var(--wool-300) !important;
+  box-shadow: var(--shadow-1) !important;
   transition: background-color .2s, border-color .2s, transform .2s;
 }
 .dzb .carousel__btn:hover { border-color: var(--yarn-orange); transform: scale(1.06); }
 .dzb .carousel__btn[disabled] { opacity: .38; cursor: not-allowed; transform: none; }
 .dzb .carousel__dots { display: flex; gap: .45rem; }
 .dzb .carousel__dot {
-  width: 11px; height: 11px; padding: 0; border: 0; border-radius: var(--r-pill);
-  background: var(--wool-400); transition: background-color .2s, transform .2s;
+  width: 11px; height: 11px; padding: 0; border: 0 !important; border-radius: var(--r-pill) !important;
+  background: var(--wool-400) !important; transition: background-color .2s, transform .2s;
 }
-.dzb .carousel__dot[aria-current="true"] { background: var(--yarn-orange); transform: scale(1.35); }
+.dzb .carousel__dot[aria-current="true"] { background: var(--yarn-orange) !important; transform: scale(1.35); }
 
 
 
@@ -663,8 +663,8 @@
 .dzb .video__poster, .dzb .video iframe {
   width: 100%;
   height: 100%;
-  border: 0;
-  border-radius: calc(var(--r-xl) - 10px);
+  border: 0 !important;
+  border-radius: calc(var(--r-xl) - 10px) !important;
   object-fit: cover;
   display: block;
 }
@@ -680,24 +680,24 @@
   place-content: center;
   padding-left: 6px;              /* оптическая компенсация треугольника */
   border: 0;
-  border-radius: var(--r-pill);
-  background: var(--yarn-orange);
-  color: #fff;
+  border-radius: var(--r-pill) !important;
+  background: var(--yarn-orange) !important;
+  color: #fff !important;
   box-shadow:
     inset 0 0 0 3px color-mix(in srgb, #fff 55%, transparent),
     0 4px 0 color-mix(in srgb, var(--wool-400) 70%, transparent),
-    0 18px 36px -14px color-mix(in srgb, var(--ink) 55%, transparent);
+    0 18px 36px -14px color-mix(in srgb, var(--ink) 55%, transparent) !important;
   transition: transform .2s var(--ease), background-color .2s;
 }
 .dzb .video__play::after {
   content: "";
   position: absolute;
   inset: 7px;
-  border: 2px dashed color-mix(in srgb, #fff 65%, transparent);
-  border-radius: var(--r-pill);
+  border: 2px dashed color-mix(in srgb, #fff 65%, transparent) !important;
+  border-radius: var(--r-pill) !important;
   pointer-events: none;
 }
-.dzb .video__play:hover { transform: translate(-50%, -50%) scale(1.06); background: var(--yarn-orange-deep); }
+.dzb .video__play:hover { transform: translate(-50%, -50%) scale(1.06); background: var(--yarn-orange-deep) !important; }
 .dzb .video__play:active { transform: translate(-50%, -50%) scale(.97); }
 .dzb .video[data-state="playing"] .video__play { display: none; }
 
@@ -707,23 +707,23 @@
 
 
 .dzb .gallery { display: grid; gap: var(--gap); grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
-.dzb .gallery img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--r-md); }
+.dzb .gallery img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--r-md) !important; }
 
 
 .dzb .accordion { display: grid; gap: .85rem; }
 .dzb .acc {
-  background: var(--wool-50);
-  border: 3px solid var(--wool-200);
-  border-radius: var(--r-lg);
+  background: var(--wool-50) !important;
+  border: 3px solid var(--wool-200) !important;
+  border-radius: var(--r-lg) !important;
   overflow: hidden;
-  box-shadow: var(--shadow-1);
+  box-shadow: var(--shadow-1) !important;
 }
 .dzb .acc[open] { border-color: var(--yarn-blue); }
 .dzb .acc__summary {
   display: flex; align-items: center; gap: .9rem;
   padding: 1.05rem 1.25rem;
-  font-family: "Comfortaa", sans-serif; font-weight: 700;
-  cursor: pointer; list-style: none;
+  font-family: "Comfortaa", sans-serif !important; font-weight: 700 !important;
+  cursor: pointer; list-style: none !important;
   min-height: 56px;
 }
 .dzb .acc__summary::-webkit-details-marker { display: none; }
@@ -735,7 +735,7 @@
   transition: transform .25s var(--ease);
 }
 .dzb .acc[open] .acc__summary::after { transform: rotate(-135deg) translate(-3px, -3px); }
-.dzb .acc__body { padding: 0 1.25rem 1.35rem; color: var(--ink-soft); }
+.dzb .acc__body { padding: 0 1.25rem 1.35rem; color: var(--ink-soft) !important; }
 .dzb .acc__body > :first-child { margin-top: 0; }
 
 
@@ -743,43 +743,43 @@
 .dzb .tag {
   padding: .5rem 1.05rem; min-height: 42px;
   display: inline-flex; align-items: center;
-  border-radius: var(--r-pill);
-  border: 2px dashed var(--thread);
-  background: var(--wool-50);
-  font-weight: 700; font-size: .92rem;
+  border-radius: var(--r-pill) !important;
+  border: 2px dashed var(--thread) !important;
+  background: var(--wool-50) !important;
+  font-weight: 700 !important; font-size: .92rem !important;
   transition: background-color .2s, border-color .2s, color .2s;
 }
 .dzb .tag:hover { border-color: var(--yarn-orange); }
-.dzb .tag[aria-pressed="true"] { background: var(--yarn-blue); border-color: var(--yarn-blue); border-style: solid; color: #fff; }
+.dzb .tag[aria-pressed="true"] { background: var(--yarn-blue) !important; border-color: var(--yarn-blue); border-style: solid; color: #fff !important; }
 
 .dzb .article-card { padding: 0; overflow: hidden; }
 .dzb .article-card__media { aspect-ratio: 16 / 10; width: 100%; object-fit: cover; }
 .dzb .article-card__body { display: grid; gap: .55rem; padding: clamp(1.1rem, 3vw, 1.5rem); }
-.dzb .article-card__date { font-size: .82rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-mute); }
-.dzb .article-card__title { font-family: "Comfortaa", sans-serif; font-size: 1.12rem; font-weight: 700; line-height: 1.3; margin: 0; }
-.dzb .article-card__text { color: var(--ink-soft); font-size: .95rem; margin: 0; }
+.dzb .article-card__date { font-size: .82rem !important; font-weight: 700 !important; letter-spacing: .07em !important; text-transform: uppercase !important; color: var(--ink-mute) !important; }
+.dzb .article-card__title { font-family: "Comfortaa", sans-serif !important; font-size: 1.12rem !important; font-weight: 700 !important; line-height: 1.3 !important; margin: 0; }
+.dzb .article-card__text { color: var(--ink-soft) !important; font-size: .95rem !important; margin: 0; }
 .dzb .article-card__tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .25rem; }
 .dzb .chip {
-  font-size: .74rem; font-weight: 700; letter-spacing: .04em;
-  padding: .25rem .6rem; border-radius: var(--r-pill);
-  background: color-mix(in srgb, var(--yarn-mustard) 28%, var(--wool-100));
-  color: var(--ink-soft);
+  font-size: .74rem !important; font-weight: 700 !important; letter-spacing: .04em !important;
+  padding: .25rem .6rem; border-radius: var(--r-pill) !important;
+  background: color-mix(in srgb, var(--yarn-mustard) 28%, var(--wool-100)) !important;
+  color: var(--ink-soft) !important;
 }
 
 .dzb .feed-status {
   padding: 1.25rem 1.4rem;
-  border: 2px dashed var(--thread);
-  border-radius: var(--r-md);
-  background: var(--wool-50);
-  color: var(--ink-soft);
+  border: 2px dashed var(--thread) !important;
+  border-radius: var(--r-md) !important;
+  background: var(--wool-50) !important;
+  color: var(--ink-soft) !important;
 }
 .dzb .feed-status[hidden] { display: none; }
 
 
-.dzb .skeleton { position: relative; overflow: hidden; background: var(--wool-200); border-radius: var(--r-lg); min-height: 280px; }
+.dzb .skeleton { position: relative; overflow: hidden; background: var(--wool-200) !important; border-radius: var(--r-lg) !important; min-height: 280px; }
 .dzb .skeleton::after {
   content: ""; position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, #fff 65%, transparent), transparent);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, #fff 65%, transparent), transparent) !important;
   transform: translateX(-100%);
   animation: knit-shimmer 1.4s infinite;
 }
@@ -793,31 +793,31 @@
 .dzb .case-fact {
   display: grid; gap: .15rem;
   padding: .9rem 1.15rem;
-  background: var(--wool-50);
+  background: var(--wool-50) !important;
   border-left: 6px solid var(--patch, var(--yarn-blue));
-  border-radius: 0 var(--r-md) var(--r-md) 0;
-  box-shadow: var(--shadow-1);
+  border-radius: 0 var(--r-md) var(--r-md) 0 !important;
+  box-shadow: var(--shadow-1) !important;
 }
 .dzb .case-fact:nth-child(2) { --patch: var(--yarn-orange); }
 .dzb .case-fact:nth-child(3) { --patch: var(--yarn-berry); }
-.dzb .case-fact dt { font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-mute); }
-.dzb .case-fact dd { margin: 0; font-weight: 600; }
+.dzb .case-fact dt { font-size: .8rem !important; font-weight: 700 !important; letter-spacing: .08em !important; text-transform: uppercase !important; color: var(--ink-mute) !important; }
+.dzb .case-fact dd { margin: 0; font-weight: 600 !important; }
 
 .dzb .quote {
   position: relative;
   display: grid; gap: 1.1rem;
   padding: clamp(1.4rem, 4vw, 2.2rem);
-  background-color: var(--wool-100);
-  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg");
+  background-color: var(--wool-100) !important;
+  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg") !important;
   background-size: 30px 30px;
-  border-radius: var(--r-lg);
-  border: 3px solid var(--wool-300);
+  border-radius: var(--r-lg) !important;
+  border: 3px solid var(--wool-300) !important;
 }
 .dzb .quote__head { display: flex; align-items: center; gap: 1rem; }
-.dzb .quote__avatar { width: 72px; height: 72px; flex: none; border-radius: var(--r-pill); object-fit: cover; padding: 4px; background: var(--wool-50); box-shadow: var(--shadow-1); }
+.dzb .quote__avatar { width: 72px; height: 72px; flex: none; border-radius: var(--r-pill) !important; object-fit: cover; padding: 4px; background: var(--wool-50) !important; box-shadow: var(--shadow-1) !important; }
 .dzb .quote__who { display: grid; gap: .15rem; }
-.dzb .quote__name { font-family: "Comfortaa", sans-serif; font-weight: 700; }
-.dzb .quote__role { font-size: .86rem; color: var(--ink-soft); line-height: 1.4; }
+.dzb .quote__name { font-family: "Comfortaa", sans-serif !important; font-weight: 700 !important; }
+.dzb .quote__role { font-size: .86rem !important; color: var(--ink-soft) !important; line-height: 1.4 !important; }
 
 
 .dzb .donate-widget {
@@ -826,9 +826,9 @@
   max-width: 620px;
   margin-inline: auto;
   padding: clamp(1.25rem, 4vw, 2rem);
-  background: var(--wool-50);
-  border: 3px dashed var(--wool-300);
-  border-radius: var(--r-lg);
+  background: var(--wool-50) !important;
+  border: 3px dashed var(--wool-300) !important;
+  border-radius: var(--r-lg) !important;
   min-height: 180px;
 }
 .dzb .donate-fallback { display: grid; gap: 1rem; }
@@ -838,16 +838,16 @@
 .dzb .requisites {
   display: grid; gap: .55rem 1.25rem;
   margin: 0;
-  font-size: .97rem;
+  font-size: .97rem !important;
 }
 @media (min-width: 640px) { .dzb .requisites { grid-template-columns: auto 1fr; } }
-.dzb .requisites dt { font-weight: 700; color: var(--ink-soft); }
+.dzb .requisites dt { font-weight: 700 !important; color: var(--ink-soft) !important; }
 .dzb .requisites dd { margin: 0; overflow-wrap: anywhere; }
 
 
 .dzb .footer {
-  background-color: var(--wool-200);
-  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg");
+  background-color: var(--wool-200) !important;
+  background-image: url("https://undemorbe.github.io/dirigible_community/assets/img/knit-seed.svg") !important;
   background-size: 30px 30px;
   border-top: 4px solid var(--wool-300);
   padding-block: clamp(2.5rem, 7vw, 4rem) 1.5rem;
@@ -855,46 +855,46 @@
 }
 .dzb .footer__grid { display: grid; gap: clamp(1.75rem, 5vw, 2.75rem); }
 @media (min-width: 760px) { .dzb .footer__grid { grid-template-columns: 1.2fr 1fr 1fr; } }
-.dzb .footer__title { font-family: "Comfortaa", sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: .9rem; }
-.dzb .footer__list { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; }
-.dzb .footer__list a { color: var(--ink); text-decoration: none; font-weight: 600; }
-.dzb .footer__list a:hover { color: var(--accent-deep); text-decoration: underline; }
-.dzb .footer__contact { display: grid; gap: .35rem; color: var(--ink-soft); }
-.dzb .footer__contact a { color: var(--ink); }
+.dzb .footer__title { font-family: "Comfortaa", sans-serif !important; font-weight: 700 !important; font-size: 1rem !important; letter-spacing: .06em !important; text-transform: uppercase !important; color: var(--ink-soft) !important; margin-bottom: .9rem; }
+.dzb .footer__list { list-style: none !important; margin: 0; padding: 0; display: grid; gap: .55rem; }
+.dzb .footer__list a { color: var(--ink) !important; text-decoration: none !important; font-weight: 600 !important; }
+.dzb .footer__list a:hover { color: var(--accent-deep) !important; text-decoration: underline !important; }
+.dzb .footer__contact { display: grid; gap: .35rem; color: var(--ink-soft) !important; }
+.dzb .footer__contact a { color: var(--ink) !important; }
 
 .dzb .socials { display: flex; gap: .6rem; margin-top: 1.1rem; }
 .dzb .social {
   width: 46px; height: 46px; display: grid; place-content: center;
-  border-radius: var(--r-pill);
-  background: var(--wool-50);
-  border: 2.5px solid var(--wool-300);
-  color: var(--ink);
+  border-radius: var(--r-pill) !important;
+  background: var(--wool-50) !important;
+  border: 2.5px solid var(--wool-300) !important;
+  color: var(--ink) !important;
   transition: transform .2s var(--ease), border-color .2s, background-color .2s;
 }
-.dzb .social:hover { transform: translateY(-3px) rotate(-6deg); border-color: var(--yarn-orange); color: var(--ink); background: #fff; }
+.dzb .social:hover { transform: translateY(-3px) rotate(-6deg); border-color: var(--yarn-orange); color: var(--ink) !important; background: #fff !important; }
 
 .dzb .footer__bottom {
   margin-top: clamp(2rem, 5vw, 3rem);
   padding-top: 1.25rem;
   border-top: 2px dashed var(--thread);
   display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; align-items: center;
-  font-size: .88rem; color: var(--ink-mute);
+  font-size: .88rem !important; color: var(--ink-mute) !important;
 }
 
 
-.dzb .text-center { text-align: center; }
+.dzb .text-center { text-align: center !important; }
 .dzb .mt-0 { margin-top: 0; }
 .dzb .mt-1 { margin-top: .75rem; }
 .dzb .mt-2 { margin-top: 1.5rem; }
 .dzb .mt-3 { margin-top: 2.5rem; }
 .dzb .mb-0 { margin-bottom: 0; }
-.dzb .muted { color: var(--ink-soft); }
+.dzb .muted { color: var(--ink-soft) !important; }
 .dzb .nowrap { white-space: nowrap; }
 .dzb .center-x { margin-inline: auto; }
 .dzb .flow > * + * { margin-top: 1rem; }
 .dzb .cluster { display: flex; flex-wrap: wrap; gap: .85rem; }
 .dzb .cluster--center { justify-content: center; }
-.dzb .full-bleed-note { font-size: .85rem; color: var(--ink-mute); }
+.dzb .full-bleed-note { font-size: .85rem !important; color: var(--ink-mute) !important; }
 
 
 
@@ -923,22 +923,44 @@
 
 @media (prefers-contrast: more) {
   .dzb { --ink-soft: #4A3A2A; --ink-mute: #5A4835; --thread: color-mix(in srgb, var(--ink) 45%, transparent); }
-  .dzb { background-image: none; }
+  .dzb { background-image: none !important; }
 }
 
 
 @media print {
-  .dzb { background: #fff; color: #000; }
+  .dzb { background: #fff !important; color: #000 !important; }
   .dzb .header, .dzb .footer, .dzb .nav, .dzb .nav-toggle, .dzb .nav-backdrop, .dzb .pompom, .dzb .cable-divider, .dzb .carousel__nav, .dzb .donate-widget { display: none !important; }
-  .dzb .card, .dzb .swatch, .dzb .quote { box-shadow: none; border: 1px solid #999; background: #fff; }
-  .dzb a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .8em; word-break: break-all; }
+  .dzb .card, .dzb .swatch, .dzb .quote { box-shadow: none !important; border: 1px solid #999 !important; background: #fff !important; }
+  .dzb a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .8em !important; word-break: break-all; }
 }
 
-/* --- цвет кнопок поверх темы конструктора --- */
-.dzb a.btn, .dzb a.btn:hover, .dzb a.btn:focus, .dzb a.btn:visited {
-  color: var(--btn-fg) !important;
-  text-decoration: none !important;
+/* --- поправки на то, что .dzb это блок, а не <body> --- */
+.dzb {
+  /* у body было min-height: 100svh — на блоке это растянуло бы каждый
+     кусок страницы на целый экран, а шапку особенно */
+  min-height: 0;
+  /* body прятал горизонтальное переполнение через overflow-x: hidden.
+     На блоке это делает его скролл-контейнером, и position: fixed/sticky
+     внутри начинает вести себя иначе. clip обрезает так же, но
+     скролл-контейнер не создаёт. */
+  overflow-x: clip;
 }
+
+/* Шапка.
+   position: sticky здесь не годится: липкий элемент держится в пределах
+   своего родителя, а конструктор заворачивает блок «HTML-код» в свой
+   контейнер высотой ровно с шапку — прилипать некуда, она уезжает вверх
+   вместе с ним. Поэтому fixed, а место под неё освобождает скрипт
+   сквозного кода: он измеряет высоту и ставит body padding-top. */
+.dzb.dzb-chrome--header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  overflow: visible;
+}
+.dzb.dzb-chrome--header .header { position: static; }
 </style>
 <script>
 /* Поведенческий слой сайта. Запускается один раз на страницу, даже если
@@ -1510,11 +1532,63 @@
     if (window.DirigibleArticles) { window.DirigibleArticles.boot(); }
   }
 
+  /* Активный пункт меню.
+     markCurrentNav() из app.js сравнивает последний сегмент пути, и на
+     главной это не работает: её адрес заканчивается слешем, а в ссылке
+     стоит полный URL. Сравниваем нормализованные пути целиком. */
+  function norm(href) {
+    try {
+      var p = new URL(href, location.href);
+      if (p.host !== location.host) { return null; }
+      return p.pathname.replace(/\/index\.html$/, "/").replace(/\/+$/, "/");
+    } catch (e) { return null; }
+  }
+
+  function markNav() {
+    var here = norm(location.href);
+    if (!here) { return; }
+    var links = document.querySelectorAll(".dzb .nav__link, .dzb .footer__list a");
+    Array.prototype.forEach.call(links, function (a) {
+      if (norm(a.getAttribute("href")) === here) {
+        a.setAttribute("aria-current", "page");
+      } else {
+        a.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  /* Шапка-блок стоит position: fixed и места в потоке не занимает —
+     без компенсации содержимое страницы уехало бы под неё. Высоту
+     меряем по факту: она зависит от ширины окна и от шрифта. */
+  function offsetHeader() {
+    var header = document.querySelector(".dzb-chrome--header");
+    if (!header) { return; }
+    var h = Math.round(header.getBoundingClientRect().height);
+    if (!h) { return; }
+    document.body.style.paddingTop = h + "px";
+    /* Переменную --header-h не трогаем: из неё растёт min-height самой
+       шапки (.header__inner), и подстановка измеренной высоты даёт
+       обратную связь — шапка раздувается до нескольких тысяч пикселей. */
+  }
+
   function watch() {
     sweep();
+    markNav();
+    offsetHeader();
+    window.addEventListener("resize", offsetHeader, { passive: true });
+    /* Первый замер случается до того, как применится шрифт и дорисуется
+       рамка шапки, — перемеряем после загрузки. */
+    window.addEventListener("load", offsetHeader);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(offsetHeader);
+    }
+    if (window.ResizeObserver) {
+      var header = document.querySelector(".dzb-chrome--header");
+      if (header) { new ResizeObserver(offsetHeader).observe(header); }
+    }
     if (!window.MutationObserver) { return; }
-    new MutationObserver(sweep).observe(document.body,
-      { childList: true, subtree: true });
+    new MutationObserver(function () { sweep(); markNav(); offsetHeader(); })
+      .observe(document.body, { childList: true, subtree: true });
   }
 
   if (document.readyState === "loading") {
