@@ -343,6 +343,36 @@ GUARD_BTN = """
    они идут раньше контента, поэтому всё равно остаются под текстом. */
 %(s)s .pompom { z-index: auto; }
 
+/* Фестоны на стыке с подвалом.
+   На сайте их рисует .scallop-bottom::after у последней секции: он
+   выходит на 13px ниже её края и ложится на фон body. Отдельными
+   блоками это не работает — конструктор кладёт каждый блок в свой
+   контейнер, и фон следующего перекрывает то, что выступило из
+   предыдущего. Поэтому внутри блока фестоны гасим и рисуем их
+   сверху на самом подвале, тем же фоном, что у секции над ним
+   (жемчужная вязка по wool-100). Класс ставит скрипт — только когда
+   на странице действительно есть секция с фестонами. */
+%(s)s .scallop-bottom::after { display: none; }
+%(s)s.dzb-chrome--footer { position: relative; }
+%(s)s.dzb-chrome--footer.dzb-scallop::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 14px;
+  background-color: var(--wool-100);
+  background-image: url("%(seed)s");
+  background-size: 30px 30px;
+  -webkit-mask-image: radial-gradient(circle at 13px 0, #000 12px, transparent 12.5px);
+          mask-image: radial-gradient(circle at 13px 0, #000 12px, transparent 12.5px);
+  -webkit-mask-size: 26px 14px;
+          mask-size: 26px 14px;
+  -webkit-mask-repeat: repeat-x;
+          mask-repeat: repeat-x;
+  pointer-events: none;
+}
+
 /* Подвал отбивается от контента внешним отступом — на сайте в этом
    просвете видно полотно и фестоны последней секции. Отдельным блоком
    тот же отступ показывал белый фон страницы конструктора. Поэтому
@@ -375,8 +405,19 @@ GUARD_BTN = """
 
 /* Высота шапки известна заранее (--header-h), поэтому отступ под неё
    задаём сразу стилями. Скрипт потом уточнит его по факту, но контент
-   уже не прыгает на величину шапки при загрузке. */
-body:has(> %(s)s.dzb-chrome--header) { padding-top: 80px; }
+   уже не прыгает на величину шапки при загрузке.
+
+   Заодно страница получает наше полотно: блоки не стыкуются вплотную
+   (отступы конструктора, просвет под шапкой), и в щелях просвечивал
+   белый фон — от этого весь сайт выглядел выцветшим. */
+/* без > : конструктор заворачивает блоки в свои контейнеры */
+body:has(%(s)s) {
+  margin: 0;
+  background-color: var(--wool-50, #FBF6EC);
+  background-image: url("%(stock)s");
+  background-size: 44px 33px;
+}
+body:has(%(s)s.dzb-chrome--header) { padding-top: 80px; }
 
 /* Плавное появление.
    Блоки конструктор вставляет не одновременно: шапка, содержимое и
@@ -495,6 +536,15 @@ SITE_SCRIPT = """</style>
       function (el) { el.classList.add("dzb-shown"); });
   }
 
+  /* Фестоны рисуются на подвале, но только если на странице есть секция,
+     которая их запрашивает. */
+  function markScallop() {
+    var footer = document.querySelector(".dzb-chrome--footer");
+    if (!footer) { return; }
+    var wants = document.querySelector(".dzb .scallop-bottom");
+    footer.classList.toggle("dzb-scallop", !!wants);
+  }
+
   function sweep() {
     Array.prototype.forEach.call(document.querySelectorAll(".dzb"), claim);
     firstSweep = false;
@@ -571,6 +621,7 @@ SITE_SCRIPT = """</style>
     sweep();
     markNav();
     markPlatform();
+    markScallop();
     measureViewport();
     offsetHeader();
     window.addEventListener("resize", function () {
@@ -595,7 +646,8 @@ SITE_SCRIPT = """</style>
     }
     if (!window.MutationObserver) { return; }
     new MutationObserver(function () {
-      sweep(); markNav(); markPlatform(); offsetHeader(); reveal();
+      sweep(); markNav(); markPlatform(); markScallop();
+      offsetHeader(); reveal();
     })
       .observe(document.body, { childList: true, subtree: true });
   }
