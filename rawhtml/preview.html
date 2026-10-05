@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Превью блока для Craftum — АНО «Дирижабль»</title>
+<style>
+  /* Эта обвязка имитирует чужую страницу Craftum: свой шрифт, свой фон,
+     свои отступы и свои правила на h2/p/img. Если блок index.html
+     отрисован правильно и ничего вокруг не поехало — изоляция работает.
+     Сам блок эти стили не наследует: у него всё под селектором .dzb. */
+  body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    background: #ffffff;
+    color: #222;
+    line-height: 1.5;
+  }
+  h2 { font-size: 40px; color: crimson; text-transform: uppercase; }
+  p  { font-size: 20px; color: crimson; }
+  img { border: 6px solid crimson; }
+  ul { list-style: square; padding-left: 40px; }
+  button { background: crimson; color: #fff; border: 0; padding: 20px; }
+  .host {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 20px;
+  }
+  .host--note {
+    background: #fff6d6;
+    border: 1px dashed #c9a227;
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 900px;
+    padding: 16px 20px;
+    font-size: 15px;
+    font-family: system-ui, sans-serif;
+    color: #5b4a12;
+  }
+</style>
+</head>
+<body>
+
+<div class="host--note">
+  <strong>Это локальная обвязка для проверки, в Craftum её вставлять не нужно.</strong>
+  Вставлять нужно содержимое <code>rawhtml/index.html</code>.
+  Намеренно уродливые красные стили вокруг — имитация чужой страницы:
+  они не должны попасть внутрь блока, а стили блока — просочиться к ним.
+</div>
+
+<div class="host">
+  <h2>Заголовок хозяйской страницы</h2>
+  <p>Абзац хозяйской страницы. Должен остаться красным, Georgia, 20px.</p>
+  <ul><li>Список хозяйской страницы — квадратные маркеры</li></ul>
+  <button type="button">Кнопка хозяйской страницы</button>
+</div>
+
+<!-- ↓↓↓ сюда вставляется содержимое rawhtml/index.html ↓↓↓ -->
+<div id="slot"></div>
+<!-- ↑↑↑ -->
+
+<div class="host">
+  <h2>Хозяйский блок после</h2>
+  <p>Тоже должен остаться красным и Georgia.</p>
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Crect width='120' height='60' fill='%23eee'/%3E%3C/svg%3E" alt="Заглушка хозяйской картинки" width="120" height="60">
+</div>
+
+<script>
+/* Craftum вставляет блок как разметку внутрь страницы. Здесь делаем то же
+   самое: подтягиваем index.html и вставляем через innerHTML.
+   innerHTML не выполняет <script>, поэтому теги скриптов пересоздаём —
+   ровно так же, как это делает конструктор на публикации. */
+fetch("index.html")
+  .then(function (r) {
+    if (!r.ok) { throw new Error("HTTP " + r.status); }
+    return r.text();
+  })
+  .then(function (html) {
+    var slot = document.getElementById("slot");
+    slot.innerHTML = html;
+    slot.querySelectorAll("script").forEach(function (old) {
+      var s = document.createElement("script");
+      s.textContent = old.textContent;
+      old.replaceWith(s);
+    });
+  })
+  .catch(function (e) {
+    document.getElementById("slot").textContent =
+      "Не удалось загрузить index.html: " + e.message +
+      ". Откройте превью через HTTP: python3 -m http.server 8123";
+  });
+</script>
+</body>
+</html>

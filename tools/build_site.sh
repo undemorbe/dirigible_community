@@ -30,7 +30,7 @@ mkdir -p _site
 # без него используем tar как запасной вариант
 EXCLUDES=(
   '.git' '.github' '.claude' '.env*' '.gitignore'
-  '_site' 'legacy' 'tools' '*.md'
+  '_site' 'legacy' 'tools' 'rawhtml' '*.md'
 )
 
 if command -v rsync >/dev/null 2>&1; then

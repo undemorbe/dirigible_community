@@ -60,7 +60,7 @@ jobs:
       - name: Собрать артефакт для Pages
         run: |
           mkdir -p _site
-          # legacy/ и tools/ на прод не нужны
+          # legacy/, tools/ и rawhtml/ на прод не нужны
           rsync -a \
             --exclude='.git' \
             --exclude='.github' \
@@ -70,6 +70,7 @@ jobs:
             --exclude='_site' \
             --exclude='legacy' \
             --exclude='tools' \
+            --exclude='rawhtml' \
             --exclude='*.md' \
             ./ _site/
           touch _site/.nojekyll
