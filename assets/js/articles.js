@@ -54,6 +54,10 @@
   function Feed(root) {
     this.root = root;
     this.endpoint = root.dataset.articlesEndpoint || 'assets/data/articles.json';
+    // Пути к картинкам и страницам внутри articles.json относительные.
+    // На сайте они разрешаются сами, а в сборке для Craftum лента живёт
+    // на чужом домене — там база задаётся через data-articles-base.
+    this.base = root.dataset.articlesBase || '';
     this.perPage = parseInt(root.dataset.articlesPerPage, 10) || 6;
     this.rubric = root.dataset.articlesRubric || '';
     this.listEl = root.querySelector('[data-articles-list]');
@@ -102,18 +106,26 @@
     });
   };
 
+  // Относительный путь из articles.json + база ленты. Абсолютные адреса,
+  // якоря, mailto: и tel: остаются как есть.
+  Feed.prototype.resolve = function (path) {
+    if (!path || !this.base) return path;
+    if (/^(https?:|\/\/|data:|#|mailto:|tel:)/i.test(path)) return path;
+    return this.base + path.replace(/^\//, '');
+  };
+
   Feed.prototype.card = function (article) {
     var isExternal = /^https?:/i.test(article.url || '');
     var node = el(article.url ? 'a' : 'article', 'card article-card' + (article.url ? ' card--link' : '') + ' reveal');
 
     if (article.url) {
-      node.href = article.url;
+      node.href = this.resolve(article.url);
       if (isExternal) { node.target = '_blank'; node.rel = 'noopener noreferrer'; }
     }
 
     if (article.image) {
       var img = el('img', 'article-card__media');
-      img.src = article.image;
+      img.src = this.resolve(article.image);
       img.alt = article.imageAlt || '';
       img.loading = 'lazy';
       img.decoding = 'async';
@@ -221,9 +233,21 @@
 
   function boot() {
     var roots = document.querySelectorAll('[data-articles]');
-    Array.prototype.forEach.call(roots, function (root) { new Feed(root).init(); });
+    Array.prototype.forEach.call(roots, function (root) {
+      // Повторный запуск возможен: в сборке для Craftum сквозной код
+      // выполняется раньше, чем на странице появляется блок с лентой,
+      // поэтому boot() зовут ещё раз. Второй Feed на том же контейнере
+      // продублировал бы карточки.
+      if (root.getAttribute('data-articles-ready') === '1') return;
+      root.setAttribute('data-articles-ready', '1');
+      new Feed(root).init();
+    });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
+
+  // Публичное API — как window.Dirigible у app.js: позволяет запустить
+  // ленту для разметки, появившейся после загрузки страницы.
+  window.DirigibleArticles = { boot: boot };
 })();

@@ -4,12 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Превью блока для Craftum — АНО «Дирижабль»</title>
+<title>Превью блоков для Craftum — АНО «Дирижабль»</title>
 <style>
   /* Эта обвязка имитирует чужую страницу Craftum: свой шрифт, свой фон,
-     свои отступы и свои правила на h2/p/img. Если блок index.html
-     отрисован правильно и ничего вокруг не поехало — изоляция работает.
-     Сам блок эти стили не наследует: у него всё под селектором .dzb. */
+     свои отступы и свои правила на h2/p/img/button. Плюс перекраска всех
+     ссылок через !important — тема конструктора так и делает, и из-за
+     этого на первой публикации пропала белая надпись на оранжевой кнопке.
+     Если блок выглядит как сайт, а обвязка осталась красной — изоляция
+     работает в обе стороны. */
   body {
     margin: 0;
     font-family: Georgia, "Times New Roman", serif;
@@ -20,17 +22,11 @@
   h2 { font-size: 40px; color: crimson; text-transform: uppercase; }
   p  { font-size: 20px; color: crimson; }
   img { border: 6px solid crimson; }
-  /* Так ведёт себя тема Craftum: красит все ссылки акцентом сайта
-     и делает это с !important. На первой публикации из-за этого
-     пропала белая надпись на оранжевой кнопке. */
-  a, a:hover, a:visited { color: #0a84ff !important; }
   ul { list-style: square; padding-left: 40px; }
   button { background: crimson; color: #fff; border: 0; padding: 20px; }
-  .host {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 24px 20px;
-  }
+  a, a:hover, a:visited { color: #0a84ff !important; }
+
+  .host { max-width: 900px; margin: 0 auto; padding: 24px 20px; }
   .host--note {
     background: #fff6d6;
     border: 1px dashed #c9a227;
@@ -42,15 +38,34 @@
     font-family: system-ui, sans-serif;
     color: #5b4a12;
   }
+  .host--note select, .host--note code { font-size: 14px; }
 </style>
 </head>
 <body>
 
 <div class="host--note">
-  <strong>Это локальная обвязка для проверки, в Craftum её вставлять не нужно.</strong>
-  Вставлять нужно содержимое <code>rawhtml/index.html</code>.
-  Намеренно уродливые красные стили вокруг — имитация чужой страницы:
-  они не должны попасть внутрь блока, а стили блока — просочиться к ним.
+  <strong>Локальная обвязка для проверки. В Craftum её вставлять не нужно.</strong><br>
+  Имитирует страницу конструктора: сквозной код из <code>site-html.html</code>
+  подключён как «Пользовательский HTML», блок из <code>pages/</code> — как блок
+  «HTML-код». Красные стили вокруг — чужие, они не должны попасть внутрь блока,
+  а стили блока — просочиться к ним.
+  <p style="font-family:system-ui,sans-serif;font-size:15px;color:#5b4a12">
+    Страница:
+    <select id="page">
+      <option value="index.html">index</option>
+      <option value="about.html">about</option>
+      <option value="news.html">news</option>
+      <option value="research.html">research</option>
+      <option value="donate.html">donate</option>
+      <option value="reports.html">reports</option>
+      <option value="documents.html">documents</option>
+      <option value="education.html">education</option>
+      <option value="program.html">program</option>
+      <option value="effective.html">effective</option>
+      <option value="survey-clients.html">survey-clients</option>
+      <option value="survey-specialists.html">survey-specialists</option>
+    </select>
+  </p>
 </div>
 
 <div class="host">
@@ -60,7 +75,7 @@
   <button type="button">Кнопка хозяйской страницы</button>
 </div>
 
-<!-- ↓↓↓ сюда вставляется содержимое rawhtml/index.html ↓↓↓ -->
+<!-- ↓↓↓ сюда подставляется блок из rawhtml/pages/ ↓↓↓ -->
 <div id="slot"></div>
 <!-- ↑↑↑ -->
 
@@ -71,27 +86,52 @@
 </div>
 
 <script>
-/* Craftum вставляет блок как разметку внутрь страницы. Здесь делаем то же
-   самое: подтягиваем index.html и вставляем через innerHTML.
+/* Craftum вставляет оба куска как разметку: сквозной код — в каждую
+   страницу, блок — в её тело. Здесь делаем то же самое через innerHTML.
    innerHTML не выполняет <script>, поэтому теги скриптов пересоздаём —
-   ровно так же, как это делает конструктор на публикации. */
-fetch("index.html")
-  .then(function (r) {
-    if (!r.ok) { throw new Error("HTTP " + r.status); }
+   ровно так же, как это делает конструктор на публикации.
+
+   Сквозной код подключается один раз: он объявляет window.__dirigibleBooted
+   и повторно не инициализируется, как и на настоящем сайте. Поэтому смена
+   страницы в списке перезагружает окно, а не подменяет блок на лету. */
+function run(container) {
+  container.querySelectorAll("script").forEach(function (old) {
+    var s = document.createElement("script");
+    s.textContent = old.textContent;
+    old.replaceWith(s);
+  });
+}
+
+function load(url) {
+  return fetch(url).then(function (r) {
+    if (!r.ok) { throw new Error(url + " → HTTP " + r.status); }
     return r.text();
+  });
+}
+
+var select = document.getElementById("page");
+var page = new URLSearchParams(location.search).get("page") || "index.html";
+select.value = page;
+select.addEventListener("change", function () {
+  location.search = "?page=" + encodeURIComponent(select.value);
+});
+
+load("site-html.html")
+  .then(function (site) {
+    var head = document.createElement("div");
+    head.innerHTML = site;
+    document.head.append.apply(document.head, Array.prototype.slice.call(head.children));
+    run(document.head);
+    return load("pages/" + page);
   })
-  .then(function (html) {
+  .then(function (block) {
     var slot = document.getElementById("slot");
-    slot.innerHTML = html;
-    slot.querySelectorAll("script").forEach(function (old) {
-      var s = document.createElement("script");
-      s.textContent = old.textContent;
-      old.replaceWith(s);
-    });
+    slot.innerHTML = block;
+    run(slot);
   })
   .catch(function (e) {
     document.getElementById("slot").textContent =
-      "Не удалось загрузить index.html: " + e.message +
+      "Не удалось загрузить: " + e.message +
       ". Откройте превью через HTTP: python3 -m http.server 8123";
   });
 </script>
