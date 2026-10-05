@@ -20,6 +20,10 @@
   h2 { font-size: 40px; color: crimson; text-transform: uppercase; }
   p  { font-size: 20px; color: crimson; }
   img { border: 6px solid crimson; }
+  /* Так ведёт себя тема Craftum: красит все ссылки акцентом сайта
+     и делает это с !important. На первой публикации из-за этого
+     пропала белая надпись на оранжевой кнопке. */
+  a, a:hover, a:visited { color: #0a84ff !important; }
   ul { list-style: square; padding-left: 40px; }
   button { background: crimson; color: #fff; border: 0; padding: 20px; }
   .host {
