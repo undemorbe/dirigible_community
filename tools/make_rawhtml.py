@@ -382,23 +382,25 @@ body:has(> %(s)s.dzb-chrome--header) { padding-top: 80px; }
    Блоки конструктор вставляет не одновременно: шапка, содержимое и
    подвал встают по очереди, плюс дорисовка шрифтов. Без этого страница
    на глазах дёргается. Показываем её одним движением, когда разметка
-   на месте — класс ставит скрипт. */
-.dzb-js %(s)s { opacity: 0; }
-%(s)s.dzb-shown { animation: dzb-fade-in .45s var(--ease) both; }
-@keyframes dzb-fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: none; }
+   на месте — класс ставит скрипт.
+
+   Именно transition, а не animation с forwards: анимация в режиме
+   заливки держит элемент в собственном контексте наложения навсегда,
+   и фон блока-подвала начинал перекрывать фестоны соседнего блока,
+   которые выступают за его нижний край. У перехода по завершении
+   остаются opacity: 1 и transform: none — контекст исчезает. */
+.dzb-js %(s)s {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .45s var(--ease), transform .45s var(--ease);
 }
 /* Шапку не сдвигаем: она fixed, трансформация создала бы containing
    block и выдвижная панель .nav (position: fixed) схлопнулась бы
    под шапку — грабли, на которые уже наступали в knit.css. */
-%(s)s.dzb-chrome--header.dzb-shown { animation-name: dzb-fade-in-flat; }
-@keyframes dzb-fade-in-flat {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
+.dzb-js %(s)s.dzb-chrome--header { transform: none; }
+.dzb-js %(s)s.dzb-shown { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
-  %(s)s.dzb-shown { animation-duration: .001ms; }
+  .dzb-js %(s)s { transition-duration: .001ms; transform: none; }
 }
 
 /* --- лейбл платформы под подвалом ---
