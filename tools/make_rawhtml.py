@@ -351,37 +351,13 @@ GUARD_BTN = """
   background-image: none;
 }
 
-/* Фестоны на стыке с подвалом.
-   На сайте их рисует .scallop-bottom::after у последней секции: он
-   выходит на 13px ниже её края и ложится на фон body. Отдельными
-   блоками это не работает — конструктор кладёт каждый блок в свой
-   контейнер, и фон следующего перекрывает то, что выступило из
-   предыдущего. Поэтому внутри блока фестоны гасим и рисуем их
-   сверху на самом подвале, тем же фоном, что у секции над ним
-   (жемчужная вязка по wool-100). Класс ставит скрипт — только когда
-   на странице действительно есть секция с фестонами. */
-%(s)s .scallop-bottom::after { display: none; }
-%(s)s.dzb-chrome--footer { position: relative; }
-%(s)s.dzb-chrome--footer.dzb-scallop::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 14px;
-  /* в точности фон .section--purl: тот же цвет шерсти и тот же тайл,
-     иначе фестоны выходят светлее секции, из которой свисают */
-  background-color: var(--wool-200);
-  background-image: url("%(seed)s");
-  background-size: 30px 30px;
-  -webkit-mask-image: radial-gradient(circle at 13px 0, #000 12px, transparent 12.5px);
-          mask-image: radial-gradient(circle at 13px 0, #000 12px, transparent 12.5px);
-  -webkit-mask-size: 26px 14px;
-          mask-size: 26px 14px;
-  -webkit-mask-repeat: repeat-x;
-          mask-repeat: repeat-x;
-  pointer-events: none;
-}
+/* Фестоны на стыке с подвалом рисует сама секция
+   (.scallop-bottom::after свисает на 13px ниже её края). Своей
+   заменой этот псевдоэлемент не подменяем: повторить его точно не
+   вышло — над полукружиями проступала нижняя рамка секции, а сами
+   они выходили мельче. Вместо этого убираем то, что их перекрывало:
+   у блока подвала нет собственного фона, полотно под просветом даёт
+   страница. */
 
 /* Подвал отбивается от контента внешним отступом — на сайте в этом
    просвете видно полотно и фестоны последней секции. Отдельным блоком
@@ -391,9 +367,6 @@ GUARD_BTN = """
 %(s)s.dzb-chrome--footer {
   margin-top: 0;
   padding-top: clamp(2rem, 6vw, 4rem);
-  background-color: var(--wool-50);
-  background-image: url("%(stock)s");
-  background-size: 44px 33px;
 }
 %(s)s.dzb-chrome--footer .footer { margin-top: 0; }
 
@@ -546,15 +519,6 @@ SITE_SCRIPT = """</style>
       function (el) { el.classList.add("dzb-shown"); });
   }
 
-  /* Фестоны рисуются на подвале, но только если на странице есть секция,
-     которая их запрашивает. */
-  function markScallop() {
-    var footer = document.querySelector(".dzb-chrome--footer");
-    if (!footer) { return; }
-    var wants = document.querySelector(".dzb .scallop-bottom");
-    footer.classList.toggle("dzb-scallop", !!wants);
-  }
-
   function sweep() {
     Array.prototype.forEach.call(document.querySelectorAll(".dzb"), claim);
     firstSweep = false;
@@ -631,7 +595,6 @@ SITE_SCRIPT = """</style>
     sweep();
     markNav();
     markPlatform();
-    markScallop();
     measureViewport();
     offsetHeader();
     window.addEventListener("resize", function () {
@@ -656,8 +619,7 @@ SITE_SCRIPT = """</style>
     }
     if (!window.MutationObserver) { return; }
     new MutationObserver(function () {
-      sweep(); markNav(); markPlatform(); markScallop();
-      offsetHeader(); reveal();
+      sweep(); markNav(); markPlatform(); offsetHeader(); reveal();
     })
       .observe(document.body, { childList: true, subtree: true });
   }
