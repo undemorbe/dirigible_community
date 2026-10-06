@@ -599,8 +599,13 @@ SITE_SCRIPT = """</style>
     var links = document.querySelectorAll('a[href*="craftum.com"]');
     Array.prototype.forEach.call(links, function (a) {
       if (a.closest(".dzb")) { return; }
+      /* Поднимаемся, пока родитель не содержит наших блоков: в части тем
+         конструктор заворачивает все блоки и подпись в один общий
+         контейнер, и подъём до прямого потомка body пометил бы весь сайт —
+         картинки получали opacity: .75, текст — цвет и кегль подписи. */
       var box = a;
-      while (box.parentElement && box.parentElement !== document.body) {
+      while (box.parentElement && box.parentElement !== document.body &&
+             !box.parentElement.querySelector(".dzb")) {
         box = box.parentElement;
       }
       box.classList.add("dzb-platform");

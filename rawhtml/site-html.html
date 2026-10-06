@@ -1,22 +1,3 @@
-<!-- =====================================================================
-     АНО «Дирижабль» — сквозной код сайта для Craftum.
-
-     Куда вставлять: «Настройки сайта» → вкладка «HTML» →
-     поле «Пользовательский HTML». Один раз на весь сайт, затем
-     «Опубликовать все страницы».
-
-     Что внутри: шрифты, весь assets/css/knit.css (заскоупленный под .dzb),
-     весь assets/js/app.js и assets/js/articles.js. Разметка страниц сюда
-     не входит — она лежит отдельными блоками «HTML-код», см. rawhtml/pages/.
-
-     Аналитики здесь нет: счётчики в Craftum ставятся его собственными
-     средствами, в том же поле «Пользовательский HTML».
-
-     Файл собран скриптом tools/make_rawhtml.py. Руками не править:
-     правки идут в knit.css / app.js, затем пересборка.
-     ===================================================================== -->
-<!-- Блоки прячутся до плавного появления только при работающем JS:
-     иначе при отключённых скриптах страница осталась бы пустой. -->
 <script>document.documentElement.classList.add("dzb-js")</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet"
@@ -1769,8 +1750,13 @@ body:has(.dzb.dzb-chrome--header) { padding-top: 80px; }
     var links = document.querySelectorAll('a[href*="craftum.com"]');
     Array.prototype.forEach.call(links, function (a) {
       if (a.closest(".dzb")) { return; }
+      /* Поднимаемся, пока родитель не содержит наших блоков: в части тем
+         конструктор заворачивает все блоки и подпись в один общий
+         контейнер, и подъём до прямого потомка body пометил бы весь сайт —
+         картинки получали opacity: .75, текст — цвет и кегль подписи. */
       var box = a;
-      while (box.parentElement && box.parentElement !== document.body) {
+      while (box.parentElement && box.parentElement !== document.body &&
+             !box.parentElement.querySelector(".dzb")) {
         box = box.parentElement;
       }
       box.classList.add("dzb-platform");
